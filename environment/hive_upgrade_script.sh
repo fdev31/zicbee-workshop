@@ -1,5 +1,7 @@
 #!/bin/sh
 
+UPGRADE_NAME=$0
+PACKAGES="zicbee-lib zicbee-vlc zicbee-mplayer zicbee"
 CLEAN=true
 HOST="http://zicbee.gnux.info/hg/index.cgi"
 
@@ -7,9 +9,11 @@ die () {
     echo "DIED on $1."
     exit 1
 }
+
 clone() {
     hg clone $*
     if [ ! $? ]; then
+        echo "pulling..."
         hg -R $1 pull
     fi
 }
@@ -22,48 +26,61 @@ else
 fi
 
 cd $env_path || die "cd $env_path"
-. ./bin/activate # source the environment
 
 if [ $# -eq 1 ]; then
     SRC=$1
+    SUFFIX=''
 else
-    SRC=
+    SRC=''
+    SUFFIX="archive/tip.zip"
 fi
 
+MODE=''
+if [ $SRC ]; then
+    if [ $SRC = "help" ]; then
+        cat <<END
+Possible parameters:
+ develop             : "easy_install develop" every package in dev
+ dev                 : clone or pull upstream and then, equivalent to "develop"
+ work                : Upgrade hive using the "dev" directory (default for clones)
+ <path to directory> : Upgrade hive using specified path containing clones of sources
+
+END
+        exit
+    elif [ -d $SRC ]; then
+        MODE=''
+    else
+        MODE=$SRC
+        SRC="dev"
+    fi
+
+else
+    SRC="http://zicbee.gnux.info/hg/index.cgi"
+fi
+
+echo $MODE
+echo $SRC
+
+echo "Removing traces of existing zicbee..."
 rm -fr usr/lib/python*/site-package/zicbee*
 
-SUFFIX=''
-MODE='std'
-if [ $SRC ]; then
-    if [ $SRC = "dev" ]; then
-        MODE='dev'
-        mkdir dev
-        cd dev
-        clone $HOST/zicbee-lib/ zicbee-lib
-        clone $HOST/zicbee-mplayer/ zicbee-mplayer
-        clone $HOST/zicbee/ zicbee
-        clone $HOST/zicbee-vlc/ zicbee-vlc
-        SRC="dev"
-        cd ..
-    fi
-else
-    SUFFIX='archive/tip.zip'
+if [ "$MODE" = "dev" ]; then
+    mkdir dev || echo "using existing dev directory"
+    (cd dev && for pkg in $PACKAGES; do clone $HOST/$PKG/ $PKG ;done )
 fi
-URLS="$SRC/zicbee-lib/$SUFFIX $SRC/zicbee/$SUFFIX $SRC/zicbee-mplayer/$SUFFIX $SRC/zicbee-vlc/$SUFFIX"
+
+URLS=''
+for pkg in $PACKAGES; do
+    URLS="$URLS $SRC/$pkg/$SUFFIX"
+done
+OPTIONS=""
+
+if [ "$MODE" = "dev" ] || [ "$MODE" = "develop" ]; then
+    OPTIONS="$OPTIONS develop"
+fi
 
 for url in $URLS; do
-    if [ $MODE = "dev" ]; then
-        ./bin/easy_install -U "$url" develop || die "install $url"
-    else
-        ./bin/easy_install -U "$url" || die "install $url"
-    fi
+    sudo easy_install -U "$url" $OPTIONS || die "install $url"
 done
 
-#echo "Doing some basic tests..."
-#
-#wasp help || die "Can't run wasp!"
-#zicdb help || die "Can't run zicdb!"
-#zicdb set fork yes|| die "Can't run zicdb!"
-#zicserve || die "Can't run zicserve!"
-#wasp kill
-
+./run_tests.sh
