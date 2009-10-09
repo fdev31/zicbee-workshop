@@ -49,6 +49,7 @@ for pyversion in $PY_VERSIONS; do
 
     cd $env_path || die "cd $env_path"
     cp ../hive_upgrade_script.sh ./UPGRADE
+    cp ../_run_tests.sh ./run_tests.sh
     ./UPGRADE $SRC || die "upgrade failed"
 
     echo "Fixing executables..."
