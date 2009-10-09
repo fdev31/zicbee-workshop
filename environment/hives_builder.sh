@@ -23,15 +23,14 @@ die () {
     exit 1
 }
 
-
-echo -n "Start from scratch ? [y/N] "
+echo -n "Start from scratch ? (All changes will be lost!) [y/N] "
 read yn
 
-if [ $yn = "n" ]; then
-    clean=
-else
+if [ $yn = "y" ]; then
     clean='yes'
     echo "Starting from scratch!"
+else
+    clean=
 fi
 
 for pyversion in $PY_VERSIONS; do
