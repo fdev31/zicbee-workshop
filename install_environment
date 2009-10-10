@@ -55,7 +55,8 @@ class Workdir(object):
             try:
                 action(self.dirname)
             except OSError, e:
-                print "Can't %s : %s"%(action.__name__, e)
+                if e.args[0] != 17:
+                    print "Can't %s : %s"%(action.__name__, e)
 
     def __exit__(self, a, b, c):
         os.chdir(self.old_path)
