@@ -89,6 +89,7 @@ class Installer(object):
         cmd = '%s%s develop'%(ADM_PREFIX, os.path.join(os.curdir, 'setup.py'))
 
         with Workdir(name):
+            os.chmod('setup.py', 0755)
             if os.system(cmd) != 0:
                 raise RuntimeError("Can't run %s!"%cmd)
 
