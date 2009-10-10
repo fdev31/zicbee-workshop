@@ -24,6 +24,7 @@ for pkg in $packages; do
 done
 
 rm -fr $OUT/share $OUT/EGG-INFO
+find $OUT -name "test*" -type d -exec rm -fr {} \;
 cp -r dev/EGG-INFO $OUT/
 (cd $OUT && zip -9r $orig_dir/bee.zip .)
 mv bee.zip bee.egg
