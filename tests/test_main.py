@@ -20,7 +20,8 @@ class ServerThread(threading.Thread):
         config.fork = f
 
     def stop(self):
-        execute('kill')
+        pass
+#        execute('kill')
 
 class TestHighLevel(object):
 
@@ -43,10 +44,6 @@ class TestHighLevel(object):
 
     def setUp(self):
         self.l = list()
-        try:
-            self.execute('kill')
-        except IOError:
-            pass
         self.server = ServerThread()
         try:
             os.mkdir(self.tmp_name)
