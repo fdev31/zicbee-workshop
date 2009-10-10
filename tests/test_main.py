@@ -69,6 +69,23 @@ class TestHighLevel(object):
         assert len(l) == 100
         self.playlist = [i.split(None, 1)[0] for i in l]
 
+    def test_delete(self):
+        pls = list(playlist)
+
+        def _rm(num, pos=1):
+            start = pos
+            stop = pos+num
+            for n in xrange(start, stop):
+                self.execute('delete %s'%pos)
+            pls[start:stop] = []
+
+            self._test_uris('show 0:10', pls[:10])
+
+        _rm(5, 1)
+        _rm(2, 0)
+        _rm(3, 2)
+        _rm(3, 5)
+
     def test_clear(self):
         self.execute('clear')
 
