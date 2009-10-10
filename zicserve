@@ -1,0 +1,2 @@
+#!/bin/sh
+PYTHONPATH=bee.egg python -c 'import zicbee.core;zicbee.core.serve()' $*
