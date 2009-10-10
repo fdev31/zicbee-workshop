@@ -2,7 +2,7 @@
 
 orig_dir=$PWD
 dist="dist"
-packages="simplejson web.py mutagen buzhug ../dev/zicbee-lib ../dev/zicbee ../dev/zicbee-vlc ../dev/zicbee-mplayer"
+packages="simplejson web.py mutagen buzhug dev/zicbee-lib dev/zicbee dev/zicbee-vlc dev/zicbee-mplayer"
 
 TMP=`tempfile`
 rm $TMP
