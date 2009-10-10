@@ -1,0 +1,9 @@
+[zicbee.player]
+mplayer = zicbee_mplayer:Player
+vlc = zicbee_vlc:Player
+
+[console_scripts]
+wasp = zicbee.wasp:startup
+zicdb = zicbee.core:startup
+zicserve = zicbee.core:serve
+

@@ -17,13 +17,14 @@ for pkg in $packages; do
             easy_install -U -e -b $dist $pkg
         fi
         rm -fr $fullpath/$dist/*.egg
-        (cd $fullpath && python -c "import setuptools; execfile('setup.py')" bdist_egg )
-        mv $fullpath/$dist/*.egg $egg
     fi
+    (cd $fullpath && rm -fr build && python -c "import setuptools; execfile('setup.py')" bdist_egg )
+    mv $fullpath/$dist/*.egg $egg
     unzip -o $egg -d $OUT
 done
 
 rm -fr $OUT/share $OUT/EGG-INFO
+cp -r dev/EGG-INFO $OUT/
 (cd $OUT && zip -9r $orig_dir/bee.zip .)
 mv bee.zip bee.egg
 rm -fr bee_pack.zip

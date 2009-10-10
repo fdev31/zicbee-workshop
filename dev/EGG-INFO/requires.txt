@@ -1,0 +1,6 @@
+zicbee-lib>=0.5
+buzhug>=1.5
+mutagen>=1.14
+web.py>=0.32
+zicbee-mplayer>=0.9
+zicbee-vlc>=0.9
