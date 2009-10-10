@@ -34,7 +34,7 @@ class Cloner(object):
         try:
             import mercurial.ui
             import mercurial.commands
-            import mercurial.localrepo.instance
+            import mercurial.localrepo
             ui = mercurial.ui.ui()
             self._hg_clone = partial(mercurial.commands.clone, ui)
             self._hg_pull = partial(mercurial.commands.pull, ui)
