@@ -112,7 +112,7 @@ if __name__ == '__main__':
     print "Status:"
     for name, res in l:
         print "[%s] %s"%(name, "OK" if res is True else res)
-    os.system('mkbee.sh')
+    os.system(os.path.join(os.path.curdir, 'mkbee.sh'))
 
 #py_version = '.'.join((str(i) for i in sys.version_info[:2]))
 #os.system('environment/hives_builder.sh dev '+py_version)
