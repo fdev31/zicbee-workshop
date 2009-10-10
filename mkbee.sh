@@ -26,13 +26,13 @@ done
 rm -fr $OUT/share $OUT/EGG-INFO
 (cd $OUT && zip -9r $orig_dir/bee.zip .)
 mv bee.zip bee.egg
-
-printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.core;zicbee.core.serve()' \$*\n" > zicserve
-printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.core;zicbee.core.startup('\$*')'\n" > zicdb
-printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.wasp;zicbee.wasp.startup()' \$*\n" > wasp
-chmod +x zicserve zicdb wasp
-
 rm -fr $TMP
+
+#printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.core;zicbee.core.serve()' \$*\n" > zicserve
+#printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.core;zicbee.core.startup('\$*')'\n" > zicdb
+#printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.wasp;zicbee.wasp.startup()' \$*\n" > wasp
+#chmod +x zicserve zicdb wasp
+
 
 #for n in *.egg; do
 #    unzip -o $n
