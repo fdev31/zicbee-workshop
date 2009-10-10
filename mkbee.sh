@@ -26,6 +26,8 @@ done
 rm -fr $OUT/share $OUT/EGG-INFO
 (cd $OUT && zip -9r $orig_dir/bee.zip .)
 mv bee.zip bee.egg
+rm -fr bee_pack.zip
+zip -9r bee_pack.zip bee.egg wasp zicdb
 rm -fr $TMP
 
 #printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.core;zicbee.core.serve()' \$*\n" > zicserve
