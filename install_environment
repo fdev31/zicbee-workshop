@@ -92,7 +92,7 @@ class Installer(object):
 
 if __name__ == '__main__':
     inst_tool = Installer()
-    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'clean', 'install')
+    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'cleanup', 'install')
     l = []
     with Workdir('dev'):
         for soft in inst_tool.softs:
