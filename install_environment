@@ -1,0 +1,115 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import urllib
+import zipfile
+import mercurial
+from functools import partial
+
+ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
+
+class Cloner(object):
+
+    HOST = "http://zicbee.gnux.info/hg/index.cgi"
+
+    def _hg_get(self, name):
+        uri = "%s/%s"%(self.HOST, name)
+        try:
+            self._hg_clone(uri)
+        except Exception, e:
+            print "Can't clone %s, pulling..."%e
+            repo = self._hg_repo(name, False)
+            self._hg_pull(repo, uri)
+
+    def _failsafe_get(self, name):
+        uri = "%s/%s/archive/tip.zip"%(self.HOST, name)
+        zipname = "%s.zip"%name
+        site = urllib.urlretrieve(uri, zipname)
+        zp = zipfile.ZipFile(zipname)
+        zp.extractall(name)
+
+    def __init__(self):
+        try:
+            import mercurial.ui
+            import mercurial.commands
+            import mercurial.localrepo.instance
+            ui = mercurial.ui.ui()
+            self._hg_clone = partial(mercurial.commands.clone, ui)
+            self._hg_pull = partial(mercurial.commands.pull, ui)
+            self._hg_repo = partial(mercurial.localrepo.instance, ui)
+
+        except ImportError:
+            self.get = self._failsafe_get
+        else:
+            self.get = self._hg_get
+
+class Workdir(object):
+    def __init__(self, name):
+        self.old_path = os.getcwd()
+        self.dirname = name
+
+    def __enter__(self):
+        for action in os.mkdir, os.chdir:
+            try:
+                action(self.dirname)
+            except OSError, e:
+                print "Can't %s : %s"%(action.__name__, e)
+
+    def __exit__(self, a, b, c):
+        os.chdir(self.old_path)
+
+class Installer(object):
+
+    softs = 'zicbee-lib zicbee zicbee-mplayer zicbee-vlc'.split()
+    deps = "simplejson web.py buzhug mutagen".split()
+
+    def __init__(self):
+        self.cloner = Cloner()
+
+    def fetch_deps(self):
+        for dep in self.deps:
+            cmd = '%s%s develop'%(ADM_PREFIX, os.path.join(os.curdir, 'setup.py'))
+            with Workdir(dep):
+                if os.system(cmd) != 0:
+                    raise RuntimeError("Can't run %s!"%cmd)
+
+    def cleanup(self, name):
+        for root, dirs, files in os.path.walk(name):
+            for fname in files:
+                if fname[-4:] in ('.pyo', '.pyc'):
+                    os.unlink(os.path.join(root, fname))
+
+    def clone(self, name):
+        self.cloner.get(name)
+
+    def install(self, name):
+        cmd = '%s%s develop'%(ADM_PREFIX, os.path.join(os.curdir, 'setup.py'))
+
+        with Workdir(name):
+            if os.system(cmd) != 0:
+                raise RuntimeError("Can't run %s!"%cmd)
+
+if __name__ == '__main__':
+    inst_tool = Installer()
+    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'clean', 'install')
+    l = []
+    with Workdir('dev'):
+        for soft in inst_tool.softs:
+            for cmd in commands:
+                fn = getattr(inst_tool, cmd)
+                name = "%s.%s"%(soft, fn.func_name)
+                try:
+                    fn(soft)
+                except Exception, e:
+                    l.append( (name, e) )
+                else:
+                    l.append( (name, True) )
+
+    print "Status:"
+    for name, res in l:
+        print "[%s] %s"%(name, "OK" if res is True else res)
+    os.system('mkbee.sh')
+
+#py_version = '.'.join((str(i) for i in sys.version_info[:2]))
+#os.system('environment/hives_builder.sh dev '+py_version)
