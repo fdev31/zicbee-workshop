@@ -27,7 +27,8 @@ class Cloner(object):
         zipname = "%s.zip"%name
         site = urllib.urlretrieve(uri, zipname)
         zp = zipfile.ZipFile(zipname)
-        zp.extractall(name)
+        zp.extractall()
+        os.rename( zp.namelist()[0].split('/', 1)[0], name)
 
     def __init__(self):
         try:
