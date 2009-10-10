@@ -1,2 +1,5 @@
-#!/bin/sh
-PYTHONPATH=bee.egg python -c 'import zicbee.wasp;zicbee.wasp.startup()' $*
+#!/usr/bin/env python
+import sys
+sys.path.insert(0, 'bee.egg')
+import zicbee.wasp
+zicbee.wasp.startup()
