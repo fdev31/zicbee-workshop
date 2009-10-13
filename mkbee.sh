@@ -27,9 +27,14 @@ rm -fr $OUT/share $OUT/EGG-INFO
 find $OUT -name "test*" -type d -exec rm -fr {} \;
 cp -r dev/EGG-INFO $OUT/
 (cd $OUT && zip -9r $orig_dir/bee.zip .)
+rm -fr zicbee
+for ext in gif css html png js; do
+    unzip -o bee.zip "zicbee/ui/*.$ext"
+    zip bee.zip -d "zicbee/ui/*.$ext"
+done
 mv bee.zip bee.egg
 rm -fr bee_pack.zip
-zip -9r bee_pack.zip bee.egg wasp zicdb
+zip -9r bee_pack.zip bee.egg wasp zicdb zicbee
 rm -fr $TMP
 
 #printf "#!/bin/sh\nPYTHONPATH=bee.egg python -c 'import zicbee.core;zicbee.core.serve()' \$*\n" > zicserve
