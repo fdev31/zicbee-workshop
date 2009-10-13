@@ -187,7 +187,8 @@ install : Easy_install develop zicbee related projects
 use 'help' for help ;)"""%sys.argv[0]
     elif commands == ['gen']:
         inst_tool.gen_package()
-        raise SystemExit()
+    elif commands == ['mkbin']:
+        inst_tool.mkbin()
     else:
         with Workdir('dev'):
             for soft in inst_tool.softs:
@@ -206,5 +207,3 @@ use 'help' for help ;)"""%sys.argv[0]
             print "[%s] %s"%(name, "OK" if res is True else res)
         inst_tool.gen_package() # generates as well
 
-#py_version = '.'.join((str(i) for i in sys.version_info[:2]))
-#os.system('environment/hives_builder.sh dev '+py_version)

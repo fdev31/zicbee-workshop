@@ -4,4 +4,4 @@ import sys
 my_dir = [p for p in sys.path if 'zicbee-work' in p][0]
 sys.path.insert(0, os.path.join(my_dir, 'bee.egg'))
 import zicbee.core
-zicbee.core.server()
+zicbee.core.serve()
