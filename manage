@@ -109,8 +109,8 @@ class Installer(object):
             egg = fullpath + '.egg'
             if not os.path.exists(egg):
                 if not os.path.isfile(egg):
-                    if not os.path.isdirectory(fullpath):
-                        os.system('easy_install -U -e -b "%s"% "%s"'%(dist, pkg))
+                    if not os.path.isdir(fullpath):
+                        os.system("easy_install -U -e -b '%s' '%s'"%(dist, pkg))
                     for e in os.listdir(fullpath):
                         if e.endswith('.egg'):
                             rm(os.path.join(fullpath, dist, e))
