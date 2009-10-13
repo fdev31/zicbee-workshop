@@ -13,6 +13,7 @@ except ImportError:
     from . import _genexecutables
 
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
+STATIC_EXTENSIONS='gif css html png js'.split()
 
 class Cloner(object):
     """ After instantiation, you can use the get(name) method to get a zicbee component
@@ -135,7 +136,7 @@ class Installer(object):
         with Workdir(tempdir) as old_dir:
             os.system("zip -9r '%s' '%s'"%(os.path.join(old_dir, egg_zip), os.curdir))
         rm('zicbee')
-        for ext in 'gif css html png js'.split():
+        for ext in STATIC_EXTENSIONS:
             pat = "'zicbee/ui/*.%s'"%ext
             os.system("unzip -o %s %s"%(egg_zip, pat))
             os.system("zip %s -d %s"%(egg_zip, pat))
