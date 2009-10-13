@@ -172,9 +172,9 @@ class Installer(object):
 
 if __name__ == '__main__':
     inst_tool = Installer()
-    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'cleanup', 'mkbin')
+    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'cleanup', 'mkbin', 'gen')
     l = []
-    if commands == ['help']:
+    def print_help():
         print """Usage: %s <command> [args...]
 
 Commands:
@@ -185,14 +185,25 @@ clone   : Clone zicbee related packages, fallsback to ZIP via HTTP if you don't 
 install : Easy_install develop zicbee related projects
 
 use 'help' for help ;)"""%sys.argv[0]
-    elif commands == ['gen']:
-        inst_tool.gen_package()
-    elif commands == ['mkbin']:
-        inst_tool.mkbin()
-    else:
+
+    cmd_handlers = {
+            'gen': inst_tool.gen_package,
+            'mkbin': inst_tool.mkbin,
+            'help': print_help
+            }
+
+    global_cmds = []
+    per_proj_cmds = []
+    for cmd in commands:
+        if cmd in cmd_handlers:
+            global_cmds.append(cmd)
+        else:
+            per_proj_cmds.append(cmd)
+
+    if per_proj_cmds:
         with Workdir('dev'):
             for soft in inst_tool.softs:
-                for cmd in commands:
+                for cmd in per_proj_cmds:
                     fn = getattr(inst_tool, cmd)
                     name = "%s.%s"%(soft, fn.func_name)
                     try:
@@ -205,5 +216,7 @@ use 'help' for help ;)"""%sys.argv[0]
         print "Status:"
         for name, res in l:
             print "[%s] %s"%(name, "OK" if res is True else res)
-        inst_tool.gen_package() # generates as well
+
+    for cmd in global_cmds:
+        cmd_handlers[cmd]()
 
