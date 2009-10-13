@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+__all__ = ['Cloner', 'Workdir', 'Installer']
 
 import os
 import sys
@@ -6,10 +7,17 @@ import urllib
 import zipfile
 import mercurial
 from functools import partial
+try:
+    import _genexecutables
+except ImportError:
+    from . import _genexecutables
 
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
 
 class Cloner(object):
+    """ After instantiation, you can use the get(name) method to get a zicbee component
+    If mercurial is installed, it will use it, if not, just get the latest version zipfile and unpack
+    """
 
     HOST = "http://zicbee.gnux.info/hg/index.cgi"
 
@@ -46,6 +54,9 @@ class Cloner(object):
             self.get = self._hg_get
 
 class Workdir(object):
+    """ Class to use with 'with' keyword, argument is a directory name.
+    It will ensure the directory is properly created and chdir into it.
+    """
     def __init__(self, name):
         self.old_path = os.getcwd()
         self.dirname = name
@@ -57,35 +68,100 @@ class Workdir(object):
             except OSError, e:
                 if e.args[0] != 17:
                     print "Can't %s : %s"%(action.__name__, e)
+        return self.old_path
 
     def __exit__(self, a, b, c):
         os.chdir(self.old_path)
 
 class Installer(object):
+    """ Zicbee installer object, all the high-level commands are here.
+    The list of dependencies are hold in self.deps and the zicbee related projects are in self.softs
+    Generally speaking, if things are not in place, then create it
+    The methods can be directly linked to script arguments
+    All commands assume you are in the parent directory of the copy of the project.
+    """
 
     softs = 'zicbee-lib zicbee zicbee-mplayer zicbee-vlc'.split()
     deps = "simplejson web.py buzhug mutagen".split()
 
     def __init__(self):
         self.cloner = Cloner()
+        self._egg_created = False
 
-    def fetch_deps(self):
-        for dep in self.deps:
-            cmd = '%s%s develop'%(ADM_PREFIX, os.path.join(os.curdir, 'setup.py'))
-            with Workdir(dep):
-                if os.system(cmd) != 0:
-                    raise RuntimeError("Can't run %s!"%cmd)
+    def gen_package(self):
+        """ Will generate hive.zip """
+        hivename = 'hive.zip'
+        import tempfile
+        import shutil
+        def rm(n):
+            if os.path.exists(n):
+                if os.path.isdir(n):
+                    shutil.rmtree(n)
+                else:
+                    os.unlink(n)
+        dist = 'dist'
+        tempdir = tempfile.mkdtemp('hive', 'bee')
+        packages = self.deps + [os.path.join('dev', p) for p in self.softs]
+        # TODO: replace all zip operations with a specific object using zipfile
+
+        for pkg in packages:
+            fullpath = os.path.join(dist, pkg)
+            egg = fullpath + '.egg'
+            if not os.path.exists(egg):
+                if not os.path.isfile(egg):
+                    if not os.path.isdirectory(fullpath):
+                        os.system('easy_install -U -e -b "%s"% "%s"'%(dist, pkg))
+                    for e in os.listdir(fullpath):
+                        if e.endswith('.egg'):
+                            rm(os.path.join(fullpath, dist, e))
+                with Workdir(fullpath):
+                    rm(os.path.join(fullpath, 'build'))
+                    rm(os.path.join(fullpath, 'dist'))
+                    os.system('''python -c "import setuptools; execfile('setup.py')" bdist_egg''')
+                    egg_file = [os.path.join(fullpath, 'dist', e) for e in os.listdir('dist') if e.endswith('.egg')][0]
+                shutil.move(egg_file, egg)
+            os.system("unzip -o '%s' -d '%s'"%(egg, tempdir))
+
+        for unwanted in 'share', 'EGG-INFO':
+            rm(os.path.join(tempdir, unwanted))
+
+        for root, dirs, files in os.walk(tempdir):
+            for d in dirs:
+                if d.startswith('test'):
+                    rm(os.path.join(root, d))
+        shutil.copytree(os.path.join('dev', 'EGG-INFO'), os.path.join(tempdir, 'EGG-INFO'))
+        egg_zip = 'bee.zip'
+        egg_name = 'bee.egg'
+        with Workdir(tempdir) as old_dir:
+            os.system("zip -9r '%s' '%s'"%(os.path.join(old_dir, egg_zip), os.curdir))
+        rm('zicbee')
+        for ext in 'gif css html png js'.split():
+            pat = "'zicbee/ui/*.%s'"%ext
+            os.system("unzip -o %s %s"%(egg_zip, pat))
+            os.system("zip %s -d %s"%(egg_zip, pat))
+        os.rename(egg_zip, egg_name)
+        rm(hivename)
+        executables = [e[0] for e in _genexecutables.executables]
+        os.system('zip -9r %s %s %s zicbee'%(hivename, egg_name, ' '.join(executables)))
+        rm('zicbee')
+        rm(tempdir)
 
     def cleanup(self, name):
+        """ Will clean up .pyo and .pyc files in the given directory """
         for root, dirs, files in os.walk(name):
             for fname in files:
                 if fname[-4:] in ('.pyo', '.pyc'):
                     os.unlink(os.path.join(root, fname))
 
     def clone(self, name):
+        """ Clones the given project name """
         self.cloner.get(name)
 
+    def mkbin(self):
+        _genexecutables.gen()
+
     def install(self, name):
+        """ Installs project via easy_install .pth files (links to project)  """
         cmd = '%s%s develop'%(ADM_PREFIX, os.path.join(os.curdir, 'setup.py'))
 
         with Workdir(name):
@@ -93,26 +169,42 @@ class Installer(object):
             if os.system(cmd) != 0:
                 raise RuntimeError("Can't run %s!"%cmd)
 
+
 if __name__ == '__main__':
     inst_tool = Installer()
-    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'cleanup', 'install')
+    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'cleanup', 'mkbin')
     l = []
-    with Workdir('dev'):
-        for soft in inst_tool.softs:
-            for cmd in commands:
-                fn = getattr(inst_tool, cmd)
-                name = "%s.%s"%(soft, fn.func_name)
-                try:
-                    fn(soft)
-                except Exception, e:
-                    l.append( (name, e) )
-                else:
-                    l.append( (name, True) )
+    if commands == ['help']:
+        print """Usage: %s <command> [args...]
 
-    print "Status:"
-    for name, res in l:
-        print "[%s] %s"%(name, "OK" if res is True else res)
-    os.system(os.path.join(os.path.curdir, 'mkbee.sh'))
+Commands:
+gen     : Generates the hive.zip, re-build project from sources if of the sources eggs are missing
+mkbin   : Recreates the executable
+cleanup : Removes those .pyc & .pyo files from projects
+clone   : Clone zicbee related packages, fallsback to ZIP via HTTP if you don't have mercurial
+install : Easy_install develop zicbee related projects
+
+use 'help' for help ;)"""%sys.argv[0]
+    elif commands == ['gen']:
+        inst_tool.gen_package()
+        raise SystemExit()
+    else:
+        with Workdir('dev'):
+            for soft in inst_tool.softs:
+                for cmd in commands:
+                    fn = getattr(inst_tool, cmd)
+                    name = "%s.%s"%(soft, fn.func_name)
+                    try:
+                        fn(soft)
+                    except Exception, e:
+                        l.append( (name, e) )
+                    else:
+                        l.append( (name, True) )
+
+        print "Status:"
+        for name, res in l:
+            print "[%s] %s"%(name, "OK" if res is True else res)
+        inst_tool.gen_package() # generates as well
 
 #py_version = '.'.join((str(i) for i in sys.version_info[:2]))
 #os.system('environment/hives_builder.sh dev '+py_version)
