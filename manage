@@ -14,11 +14,10 @@ try:
 except ImportError:
     from . import _genexecutables
 
-hivename = 'hive.zip'
+hivename = 'zicbee.zip'
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
 STATIC_EXTENSIONS = 'gif css html png js'.split()
 
-#    [os.path.join(r, n) for r, d, f in os.walk('/tmp') for n in f if n.endswith('.js')]
 class Zipper(list):
     """ Object used to handle zip files """
     def __init__(self, zipname):
@@ -32,11 +31,11 @@ class Zipper(list):
         zf.extractall(to_path, members)
         zf.close()
 
-    def save(self, as_name=None):
+    def save(self, as_name=None, prefix=''):
         name = as_name or self.name
         zf = zipfile.ZipFile(name, 'w', zipfile.ZIP_DEFLATED)
         for fname, dirname in self:
-            zf.write(fname, fname[len(dirname):])
+            zf.write(fname, prefix+fname[len(dirname):])
         zf.close()
 
 class Cloner(object):
@@ -191,10 +190,17 @@ class Installer(object):
             zipper[:] = static_files
             zipper.append((egg_name, ''))
             zipper.extend(executables)
-            print "Saving %s..."%hivename
-            zipper.save(hivename)
+            with Workdir('release'):
+                print "Saving %s..."%hivename
+            sys.path.insert(0, os.path.join(os.curdir, egg_name))
+            from zicbee import __version__ as ver
+            sys.path.pop(0)
+            root, ext = hivename.rsplit('.', 1)
+            zipname = j('release', "%s-%s.%s"%(root, ver, ext))
+
+            zipper.save(zipname, prefix='%s%s'%(zipname[7:-4], os.sep))
             print "Testing by extracting..."
-            zipper.extract(hivename)
+            zipper.extract(zipname)
 
     def cleanup(self, name):
         """ Will clean up .pyo and .pyc files in the given directory """
