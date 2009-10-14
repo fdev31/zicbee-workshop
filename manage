@@ -4,6 +4,8 @@ __all__ = ['Cloner', 'Workdir', 'Installer']
 import os
 import sys
 import urllib
+import shutil
+import tempfile
 import zipfile
 import mercurial
 from functools import partial
@@ -15,6 +17,27 @@ except ImportError:
 hivename = 'hive.zip'
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
 STATIC_EXTENSIONS = 'gif css html png js'.split()
+
+#    [os.path.join(r, n) for r, d, f in os.walk('/tmp') for n in f if n.endswith('.js')]
+class Zipper(list):
+    """ Object used to handle zip files """
+    def __init__(self, zipname):
+        self.name = zipname
+
+    def extract(self, name=None, to_path=None, members=None, load=False):
+        name = name or self.name
+        zf = zipfile.ZipFile(name)
+        if load:
+            self[:] = [(x, x) for x in zf.namelist()]
+        zf.extractall(to_path, members)
+        zf.close()
+
+    def save(self, as_name=None):
+        name = as_name or self.name
+        zf = zipfile.ZipFile(name, 'w', zipfile.ZIP_DEFLATED)
+        for fname, dirname in self:
+            zf.write(fname, fname[len(dirname):])
+        zf.close()
 
 class Cloner(object):
     """ After instantiation, you can use the get(name) method to get a zicbee component
@@ -36,8 +59,7 @@ class Cloner(object):
         uri = "%s/%s/archive/tip.zip"%(self.HOST, name)
         zipname = "%s.zip"%name
         site = urllib.urlretrieve(uri, zipname)
-        zp = zipfile.ZipFile(zipname)
-        zp.extractall()
+        Zipper(zipname).extract()
         os.rename( zp.namelist()[0].split('/', 1)[0], name)
 
     def __init__(self):
@@ -75,6 +97,24 @@ class Workdir(object):
     def __exit__(self, a, b, c):
         os.chdir(self.old_path)
 
+def rm(n):
+    if os.path.exists(n):
+        if os.path.isdir(n):
+            shutil.rmtree(n)
+        else:
+            os.unlink(n)
+
+class TempDir(object):
+    def __init__(self):
+        self.name = tempfile.mkdtemp('bee_', '_hive')
+
+    def __enter__(self):
+        return self.name
+
+    def __exit__(self, a, b, c):
+        print "Clean up..."
+        rm(self.name)
+
 class Installer(object):
     """ Zicbee installer object, all the high-level commands are here.
     The list of dependencies are hold in self.deps and the zicbee related projects are in self.softs
@@ -94,64 +134,65 @@ class Installer(object):
     def gen_package(self, forced=False):
         """ Will generate %s """%hivename
         # TODO: create "build" command that is called here
-        import tempfile
-        import shutil
-        def rm(n):
-            if os.path.exists(n):
-                if os.path.isdir(n):
-                    shutil.rmtree(n)
-                else:
-                    os.unlink(n)
+        j = os.path.join
         dist = 'dist'
-        tempdir = tempfile.mkdtemp('hive', 'bee')
-        packages = self.deps + [os.path.join('dev', p) for p in self.softs]
-        # TODO: replace all zip operations with a specific object using zipfile
+        with TempDir() as tempdir:
+            packages = self.deps + [j('dev', p) for p in self.softs]
+            # TODO: replace all zip operations with a specific object using zipfile
 
-        STATIC_PATTERN = "'zicbee/ui/*.%s'"
-        import setuptools
-        for pkg in packages:
-            fullpath = os.path.join(dist, pkg)
-            egg = fullpath + '.egg'
-            if forced or not os.path.exists(egg):
-                if not os.path.isfile(egg):
-                    if not os.path.isdir(fullpath):
-                        os.system("easy_install -U -e -b '%s' '%s'"%(dist, pkg))
-                    for e in os.listdir(fullpath):
-                        if e.endswith('.egg'):
-                            rm(os.path.join(fullpath, dist, e))
-                with Workdir(fullpath):
-                    rm(os.path.join(fullpath, 'build'))
-                    rm(os.path.join(fullpath, 'dist'))
-                    os.system('''python -c "import setuptools; execfile('setup.py')" bdist_egg''')
-                    egg_file = [os.path.join(fullpath, 'dist', e) for e in os.listdir('dist') if e.endswith('.egg')][0]
-                shutil.move(egg_file, egg)
-            os.system("unzip -o '%s' -d '%s'"%(egg, tempdir))
+            STATIC_PATTERN = "'zicbee/ui/*.%s'"
+            egg_name = 'bee.egg'
 
-        for unwanted in 'share', 'EGG-INFO':
-            rm(os.path.join(tempdir, unwanted))
+            import setuptools
+            zipper = Zipper(j(os.getcwd(), egg_name))
+            for pkg in packages:
+                fullpath = j(dist, pkg)
+                egg = fullpath + '.egg'
+                if forced or not os.path.exists(egg):
+                    if not os.path.isfile(egg):
+                        if not os.path.isdir(fullpath):
+                            os.system("easy_install -U -e -b '%s' '%s'"%(dist, pkg))
+                        for e in os.listdir(fullpath):
+                            if e.endswith('.egg'):
+                                rm(j(fullpath, dist, e))
+                    with Workdir(fullpath):
+                        rm(j(fullpath, 'build'))
+                        rm(j(fullpath, 'dist'))
+                        os.system('''python -c "import setuptools; execfile('setup.py')" bdist_egg''')
+                        egg_file = [j(fullpath, 'dist', e) for e in os.listdir('dist') if e.endswith('.egg')][0]
+                    shutil.move(egg_file, egg)
+                print "extracting %s..."%egg
+                zipper.extract(egg, tempdir)
 
-        for root, dirs, files in os.walk(tempdir):
-            for d in dirs:
-                if d.startswith('test'):
-                    rm(os.path.join(root, d))
-        shutil.copytree(os.path.join('dev', 'EGG-INFO'), os.path.join(tempdir, 'EGG-INFO'))
-        egg_zip = 'bee.zip'
-        egg_name = 'bee.egg'
-        with Workdir(tempdir) as old_dir:
-            os.system("zip -9r '%s' '%s'"%(os.path.join(old_dir, egg_zip), os.curdir))
-        rm('zicbee')
-        for ext in STATIC_EXTENSIONS:
-            pat = STATIC_PATTERN%ext
-            os.system("unzip -o %s %s"%(egg_zip, pat))
-            os.system("zip %s -d %s"%(egg_zip, pat))
-        os.rename(egg_zip, egg_name)
-        rm(hivename)
-        executables = [e[0] for e in _genexecutables.executables]
-        os.system('zip -9r %s %s %s zicbee'%(hivename, egg_name, ' '.join(executables)))
-        rm('zicbee')
-        rm(tempdir)
-        for ext in STATIC_EXTENSIONS:
-            os.system("unzip -o '%s' '%s'"%(hivename, STATIC_PATTERN%ext))
+            for unwanted in 'share', 'EGG-INFO':
+                rm(j(tempdir, unwanted))
+
+            for root, dirs, files in os.walk(tempdir):
+                for d in dirs:
+                    if d.startswith('test'):
+                        rm(j(root, d))
+            shutil.copytree(j('dev', 'EGG-INFO'), j(tempdir, 'EGG-INFO'))
+            static_files = []
+            for r, d, f in os.walk(tempdir):
+                for n in f:
+                    ext = n.rsplit('.', 1)[-1]
+                    if ext in STATIC_EXTENSIONS:
+                        static_files.append((j(r,n), tempdir))
+                    elif ext not in ('pyo', 'pyc', 'swp', 'rej'):
+                        zipper.append((j(r, n), tempdir))
+
+            print "Saving %s..."%zipper.name
+            zipper.save()
+            with Workdir(tempdir) as old_dir:
+                for fname in zipper:
+                    rm(fname[0])
+            rm(hivename)
+            executables = [(e[0], '') for e in _genexecutables.executables]
+            zipper[:] = static_files
+            zipper.append((egg_name, ''))
+            zipper.extend(executables)
+            print "Saving %s..."%hivename
+            zipper.save(hivename)
 
     def cleanup(self, name):
         """ Will clean up .pyo and .pyc files in the given directory """
