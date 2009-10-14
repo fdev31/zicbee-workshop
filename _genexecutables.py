@@ -8,7 +8,7 @@ import sys
 DB_DIR = os.path.expanduser(os.getenv('ZICDB_PATH') or '~/.zicdb')
 exists = os.path.exists
 j = os.path.join
-my_dir = [p for p in sys.path if 'zicbee-work' in p if exists(j(p, 'bee.egg'))][0]
+my_dir = [p for p in sys.path if exists(j(p, 'bee.egg'))][0]
 sys.path[0:0] = (j(my_dir, 'bee.egg'), j(my_dir, 'dev'))
 import %(mod)s
 %(exe)s()
