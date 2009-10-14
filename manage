@@ -16,7 +16,7 @@ except ImportError:
 
 hivename = 'zicbee.zip'
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
-STATIC_EXTENSIONS = 'gif css html png js'.split()
+STATIC_EXTENSIONS = [] # for now sounds fine with pkg_resources :)
 
 class Zipper(list):
     """ Object used to handle zip files """
@@ -190,17 +190,20 @@ class Installer(object):
             zipper[:] = static_files
             zipper.append((egg_name, ''))
             zipper.extend(executables)
-            with Workdir('release'):
-                print "Saving %s..."%hivename
+            print "Saving %s..."%hivename
             sys.path.insert(0, os.path.join(os.curdir, egg_name))
             from zicbee import __version__ as ver
             sys.path.pop(0)
             root, ext = hivename.rsplit('.', 1)
-            zipname = j('release', "%s-%s.%s"%(root, ver, ext))
+            zipname = j("%s-%s.%s"%(root, ver, ext))
 
-            zipper.save(zipname, prefix='%s%s'%(zipname[7:-4], os.sep))
+            foldername = zipname[:-4]
+            zipper.save(zipname, prefix='%s%s'%(foldername, os.sep))
             print "Testing by extracting..."
-            zipper.extract(zipname)
+            zipper.extract(zipname, members=(foldername + x[0][len(x[1]):] for x in static_files))
+            with Workdir('release'):
+                shutil.move(j(os.pardir, zipname), j(os.curdir, zipname))
+#            os.rename(foldername, root)
 
     def cleanup(self, name):
         """ Will clean up .pyo and .pyc files in the given directory """
