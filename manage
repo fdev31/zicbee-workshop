@@ -12,8 +12,9 @@ try:
 except ImportError:
     from . import _genexecutables
 
+hivename = 'hive.zip'
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
-STATIC_EXTENSIONS='gif css html png js'.split()
+STATIC_EXTENSIONS = 'gif css html png js'.split()
 
 class Cloner(object):
     """ After instantiation, you can use the get(name) method to get a zicbee component
@@ -88,10 +89,11 @@ class Installer(object):
     def __init__(self):
         self.cloner = Cloner()
         self._egg_created = False
+        self.force_gen = partial(self.gen_package, forced=True)
 
-    def gen_package(self):
-        """ Will generate hive.zip """
-        hivename = 'hive.zip'
+    def gen_package(self, forced=False):
+        """ Will generate %s """%hivename
+        # TODO: create "build" command that is called here
         import tempfile
         import shutil
         def rm(n):
@@ -105,10 +107,12 @@ class Installer(object):
         packages = self.deps + [os.path.join('dev', p) for p in self.softs]
         # TODO: replace all zip operations with a specific object using zipfile
 
+        STATIC_PATTERN = "'zicbee/ui/*.%s'"
+        import setuptools
         for pkg in packages:
             fullpath = os.path.join(dist, pkg)
             egg = fullpath + '.egg'
-            if not os.path.exists(egg):
+            if forced or not os.path.exists(egg):
                 if not os.path.isfile(egg):
                     if not os.path.isdir(fullpath):
                         os.system("easy_install -U -e -b '%s' '%s'"%(dist, pkg))
@@ -137,7 +141,7 @@ class Installer(object):
             os.system("zip -9r '%s' '%s'"%(os.path.join(old_dir, egg_zip), os.curdir))
         rm('zicbee')
         for ext in STATIC_EXTENSIONS:
-            pat = "'zicbee/ui/*.%s'"%ext
+            pat = STATIC_PATTERN%ext
             os.system("unzip -o %s %s"%(egg_zip, pat))
             os.system("zip %s -d %s"%(egg_zip, pat))
         os.rename(egg_zip, egg_name)
@@ -146,6 +150,8 @@ class Installer(object):
         os.system('zip -9r %s %s %s zicbee'%(hivename, egg_name, ' '.join(executables)))
         rm('zicbee')
         rm(tempdir)
+        for ext in STATIC_EXTENSIONS:
+            os.system("unzip -o '%s' '%s'"%(hivename, STATIC_PATTERN%ext))
 
     def cleanup(self, name):
         """ Will clean up .pyo and .pyc files in the given directory """
@@ -173,22 +179,27 @@ class Installer(object):
 
 if __name__ == '__main__':
     inst_tool = Installer()
-    commands = sys.argv[1:] if len(sys.argv)>1 else ('clone', 'cleanup', 'mkbin', 'gen')
+    default_cmds = ('clone', 'cleanup', 'mkbin', 'gen')
+    commands = sys.argv[1:] if len(sys.argv)>1 else default_cmds
     l = []
     def print_help():
-        print """Usage: %s <command> [args...]
+        print """Usage: %s <command> [command]...
+
+default commands: %s
 
 Commands:
-gen     : Generates the hive.zip, re-build project from sources if of the sources eggs are missing
+gen     : Generates the %s, re-build project from sources if of the sources eggs are missing
+fgen    : Generates the %s, re-build project from sources unconditionally
 mkbin   : Recreates the executable
 cleanup : Removes those .pyc & .pyo files from projects
 clone   : Clone zicbee related packages, fallsback to ZIP via HTTP if you don't have mercurial
 install : Easy_install develop zicbee related projects
 
-use 'help' for help ;)"""%sys.argv[0]
+use 'help' for help ;)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
 
     cmd_handlers = {
             'gen': inst_tool.gen_package,
+            'fgen': inst_tool.force_gen,
             'mkbin': inst_tool.mkbin,
             'help': print_help
             }
