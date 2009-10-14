@@ -193,6 +193,8 @@ class Installer(object):
             zipper.extend(executables)
             print "Saving %s..."%hivename
             zipper.save(hivename)
+            print "Testing by extracting..."
+            zipper.extract(hivename)
 
     def cleanup(self, name):
         """ Will clean up .pyo and .pyc files in the given directory """
