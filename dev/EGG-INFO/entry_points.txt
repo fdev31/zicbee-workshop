@@ -6,4 +6,3 @@ vlc = zicbee_vlc:Player
 wasp = zicbee.wasp:startup
 zicdb = zicbee.core:startup
 zicserve = zicbee.core:serve
-
