@@ -137,12 +137,8 @@ class Installer(object):
         dist = 'dist'
         with TempDir() as tempdir:
             packages = self.deps + [j('dev', p) for p in self.softs]
-            # TODO: replace all zip operations with a specific object using zipfile
-
-            STATIC_PATTERN = "'zicbee/ui/*.%s'"
             egg_name = 'bee.egg'
 
-            import setuptools
             zipper = Zipper(j(os.getcwd(), egg_name))
             for pkg in packages:
                 fullpath = j(dist, pkg)
@@ -203,7 +199,6 @@ class Installer(object):
             zipper.extract(zipname, members=(foldername + x[0][len(x[1]):] for x in static_files))
             with Workdir('release'):
                 shutil.move(j(os.pardir, zipname), j(os.curdir, zipname))
-#            os.rename(foldername, root)
 
     def cleanup(self, name):
         """ Will clean up .pyo and .pyc files in the given directory """
