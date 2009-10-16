@@ -242,7 +242,9 @@ if __name__ == '__main__':
     def print_help():
         print """Usage: %s <command> [command]...
 
-default commands: %s
+If no parameter is given, will execute: %s.
+This is the ideal for the first run,
+replace "gen" with "fgen" or remove all .egg files for a full update.
 
 Commands:
 gen     : Generates the %s, re-build project from sources if of the sources eggs are missing
@@ -253,7 +255,7 @@ mkbin   : Recreates the executable
 cleanup : Removes those .pyc & .pyo files from projects
 install : Easy_install develop zicbee related projects
 
-use 'help' for help ;)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
+I'm glad to receive bug reports to on fdev31@gmail.com :)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
 
     cmd_handlers = {
             'gen': inst_tool.gen_package,
