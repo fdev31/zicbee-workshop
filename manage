@@ -15,7 +15,7 @@ except ImportError:
     from . import _genexecutables
 
 hivename = 'zicbee.zip'
-ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else ''
+ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else '' # XXX: os independent way ?
 STATIC_EXTENSIONS = [] # for now sounds fine with pkg_resources :)
 
 class Zipper(list):
@@ -247,9 +247,10 @@ default commands: %s
 Commands:
 gen     : Generates the %s, re-build project from sources if of the sources eggs are missing
 fgen    : Generates the %s, re-build project from sources unconditionally
+pull    : Pull latest changes from server, clone if not already here,
+          fallbacks to unversioned folder (from zip).
 mkbin   : Recreates the executable
 cleanup : Removes those .pyc & .pyo files from projects
-pull    : Clone zicbee related packages (update if already existing), fallsback to ZIP via HTTP if you don't have mercurial
 install : Easy_install develop zicbee related projects
 
 use 'help' for help ;)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
