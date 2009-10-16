@@ -218,7 +218,7 @@ class Installer(object):
                 if fname[-4:] in ('.pyo', '.pyc'):
                     os.unlink(os.path.join(root, fname))
 
-    def clone(self, name):
+    def pull(self, name):
         """ Clones the given project name """
         self.cloner.get(name)
 
@@ -237,7 +237,7 @@ class Installer(object):
 
 if __name__ == '__main__':
     inst_tool = Installer()
-    default_cmds = ('clone', 'cleanup', 'mkbin', 'gen')
+    default_cmds = ('pull', 'cleanup', 'mkbin', 'gen')
     commands = sys.argv[1:] if len(sys.argv)>1 else default_cmds
     l = []
     def print_help():
@@ -250,7 +250,7 @@ gen     : Generates the %s, re-build project from sources if of the sources eggs
 fgen    : Generates the %s, re-build project from sources unconditionally
 mkbin   : Recreates the executable
 cleanup : Removes those .pyc & .pyo files from projects
-clone   : Clone zicbee related packages, fallsback to ZIP via HTTP if you don't have mercurial
+pull    : Clone zicbee related packages (update if already existing), fallsback to ZIP via HTTP if you don't have mercurial
 install : Easy_install develop zicbee related projects
 
 use 'help' for help ;)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
