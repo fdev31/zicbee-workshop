@@ -27,7 +27,7 @@ class Zipper(list):
         name = name or self.name
         zf = zipfile.ZipFile(name)
         if load:
-            self[:] = [(x, x) for x in zf.namelist()]
+            self[:] = [(x, '') for x in zf.namelist()]
         zf.extractall(to_path, members)
         zf.close()
 
@@ -59,8 +59,17 @@ class Cloner(object):
         uri = "%s/%s/archive/tip.zip"%(self.HOST, name)
         zipname = "%s.zip"%name
         site = urllib.urlretrieve(uri, zipname)
-        Zipper(zipname).extract()
-        os.rename( zp.namelist()[0].split('/', 1)[0], name)
+        zp = Zipper(zipname)
+        zp.extract(load=True)
+        dirname = zp[0][0].split( '/', 1)[0]
+        if os.path.exists( os.path.join( name, '.hg')):
+            print 'You are about to destroy the %s repository.\nIf you don\'t, zip file content is kept under "%s".'%(name, os.path.join(os.getcwd(), dirname))
+            yn = raw_input('Do you want to proceed [yN] ? ')
+            if not yn or yn[0].lower() != 'y':
+                print "Not overwriting, install mercurial to have good update support."
+                return
+        shutil.rmtree(name)
+        os.rename( dirname, name)
 
     def __init__(self):
         try:
@@ -263,9 +272,9 @@ use 'help' for help ;)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hiven
 
     if per_proj_cmds:
         with Workdir('dev'):
+            commands = [getattr(inst_tool, cmd) for cmd in per_proj_cmds if hasattr(inst_tool, cmd)]
             for soft in inst_tool.softs:
-                for cmd in per_proj_cmds:
-                    fn = getattr(inst_tool, cmd)
+                for fn in commands:
                     name = "%s.%s"%(soft, fn.func_name)
                     try:
                         fn(soft)
