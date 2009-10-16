@@ -50,7 +50,6 @@ class Cloner(object):
         try:
             self._hg_clone(uri)
         except Exception, e:
-            print "Can't clone %s, pulling..."%e
             repo = self._hg_repo(name, False)
             self._hg_pull(repo, uri)
             self._hg_up(repo, 'tip')
