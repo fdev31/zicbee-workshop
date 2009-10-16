@@ -53,6 +53,7 @@ class Cloner(object):
             print "Can't clone %s, pulling..."%e
             repo = self._hg_repo(name, False)
             self._hg_pull(repo, uri)
+            self._hg_up(repo, 'tip')
 
     def _failsafe_get(self, name):
         uri = "%s/%s/archive/tip.zip"%(self.HOST, name)
@@ -69,6 +70,7 @@ class Cloner(object):
             ui = mercurial.ui.ui()
             self._hg_clone = partial(mercurial.commands.clone, ui)
             self._hg_pull = partial(mercurial.commands.pull, ui)
+            self._hg_up = partial(mercurial.commands.update, ui)
             self._hg_repo = partial(mercurial.localrepo.instance, ui)
 
         except ImportError:
