@@ -283,9 +283,12 @@ use 'help' for help ;)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hiven
                     else:
                         l.append( (name, True) )
 
-        print "Status:"
-        for name, res in l:
-            print "[%s] %s"%(name, "OK" if res is True else res)
+        if l:
+            print "Status:"
+            for name, res in l:
+                print "[%s] %s"%(name, "OK" if res is True else res)
+        else:
+            print 'try "%s help".'%sys.argv[0]
 
     for cmd in global_cmds:
         cmd_handlers[cmd]()
