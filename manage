@@ -255,7 +255,7 @@ mkbin   : Recreates the executable
 cleanup : Removes those .pyc & .pyo files from projects
 install : Easy_install develop zicbee related projects
 
-I'm glad to receive bug reports to on fdev31@gmail.com :)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
+Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
 
     cmd_handlers = {
             'gen': inst_tool.gen_package,
