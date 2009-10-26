@@ -138,10 +138,13 @@ class Installer(object):
     def __init__(self):
         self.cloner = Cloner()
         self._egg_created = False
-        self.force_gen = partial(self.gen_package, forced=True)
+        self.force_gen = partial(self._gen_package, forced=True)
+        self.std_gen = partial(self._gen_package, forced=False)
 
-    def gen_package(self, forced=False):
+    def _gen_package(self, *args, **kw):
         """ Will generate %s """%hivename
+        forced = kw.pop('forced', False)
+
         # TODO: create "build" command that is called here
         j = os.path.join
         dist = 'dist'
@@ -153,7 +156,9 @@ class Installer(object):
             for pkg in packages:
                 fullpath = j(dist, pkg)
                 egg = fullpath + '.egg'
-                if forced or not os.path.exists(egg):
+                # if forced remove everything
+                # BUT if you give arguments, only the specified ones are removed
+                if (forced and (not args or pkg.rsplit(os.sep, 1)[-1] in args)) or not os.path.exists(egg):
                     if not os.path.isfile(egg):
                         if not os.path.isdir(fullpath):
                             os.system("easy_install -U -e -b '%s' '%s'"%(dist, pkg))
@@ -258,7 +263,7 @@ install : Easy_install develop zicbee related projects
 Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
 
     cmd_handlers = {
-            'gen': inst_tool.gen_package,
+            'gen': inst_tool.std_gen,
             'fgen': inst_tool.force_gen,
             'mkbin': inst_tool.mkbin,
             'help': print_help
@@ -267,19 +272,25 @@ Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0],
     global_cmds = []
     per_proj_cmds = []
     for cmd in commands:
-        if cmd in cmd_handlers:
-            global_cmds.append(cmd)
+        cmdlist = cmd.split('.')
+        if cmdlist:
+            cmd = cmdlist[0]
+            args = cmdlist[1:]
         else:
-            per_proj_cmds.append(cmd)
+            args = []
+        if cmd in cmd_handlers:
+            global_cmds.append((cmd, args))
+        else:
+            per_proj_cmds.append((cmd, args))
 
     if per_proj_cmds:
         with Workdir('dev'):
-            commands = [getattr(inst_tool, cmd) for cmd in per_proj_cmds if hasattr(inst_tool, cmd)]
+            commands = [(getattr(inst_tool, cmd), args) for cmd, args in per_proj_cmds if hasattr(inst_tool, cmd)]
             for soft in inst_tool.softs:
-                for fn in commands:
+                for fn, args in commands:
                     name = "%s.%s"%(soft, fn.func_name)
                     try:
-                        fn(soft)
+                        fn(soft, *args)
                     except Exception, e:
                         l.append( (name, e) )
                     else:
@@ -292,6 +303,6 @@ Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0],
         else:
             print 'try "%s help".'%sys.argv[0]
 
-    for cmd in global_cmds:
-        cmd_handlers[cmd]()
+    for cmd, args in global_cmds:
+        cmd_handlers[cmd](*args)
 
