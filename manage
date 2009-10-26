@@ -254,6 +254,7 @@ replace "gen" with "fgen" or remove all .egg files for a full update.
 Commands:
 gen     : Generates the %s, re-build project from sources if of the sources eggs are missing
 fgen    : Generates the %s, re-build project from sources unconditionally
+          you can limit the rebuilding to specified packages. Ex: fgen.zicbee-lib.zicbee
 pull    : Pull latest changes from server, clone if not already here,
           fallbacks to unversioned folder (from zip).
 mkbin   : Recreates the executable
