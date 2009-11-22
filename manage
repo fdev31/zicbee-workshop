@@ -132,7 +132,7 @@ class Installer(object):
     All commands assume you are in the parent directory of the copy of the project.
     """
 
-    softs = 'zicbee-lib zicbee zicbee-mplayer zicbee-vlc'.split()
+    softs = 'zicbee-lib zicbee zicbee-mplayer zicbee-vlc zicbee-gst'.split()
     deps = "simplejson web.py buzhug mutagen".split()
 
     def __init__(self):
