@@ -188,7 +188,7 @@ class Installer(object):
                     ext = n.rsplit('.', 1)[-1]
                     if ext in STATIC_EXTENSIONS:
                         static_files.append((j(r,n), tempdir))
-                    elif ext not in ('pyo', 'pyc', 'swp', 'rej'):
+                    elif ext not in ('pyo', 'pyc', 'swp', 'rej', 'so'):
                         zipper.append((j(r, n), tempdir))
 
             print "Saving %s..."%zipper.name
