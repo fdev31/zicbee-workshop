@@ -70,7 +70,7 @@ class TestHighLevel(object):
         self.playlist = [i.split(None, 1)[0] for i in l]
 
     def test_delete(self):
-        pls = list(playlist)
+        pls = list(self.playlist)
 
         def _rm(num, pos=1):
             start = pos
