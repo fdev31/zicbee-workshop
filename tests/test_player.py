@@ -45,3 +45,7 @@ from zicbee_mplayer import Player as MPlayer
 class TestMPlayer(PlayerTester):
     player = MPlayer
 
+from zicbee_gst import Player as GSTPlayer
+class TestGSTReamer(PlayerTester):
+    player = GSTPlayer
+
