@@ -1,6 +1,7 @@
 [zicbee.player]
 mplayer = zicbee_mplayer:Player
 vlc = zicbee_vlc:Player
+gst = zicbee_gst:Player
 
 [console_scripts]
 wasp = zicbee.wasp:startup
