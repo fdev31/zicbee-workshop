@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import sys
 import traceback
 
 testers = []
@@ -13,9 +14,20 @@ for fname in os.listdir(os.path.curdir):
             if sym.startswith('Test'):
                 testers.append(getattr(m, sym)())
 
+if len(sys.argv) > 1:
+    whitelist = [a.replace('.', ':') for a in sys.argv[1:]]
+else:
+    whitelist = None
+
 # test
 for tester in testers:
     prefix = "%s:"%tester.__class__.__name__
+
+    # skip if won't run at all
+    if whitelist and not any((prefix+name[5:]).startswith(n) for n in whitelist for name in dir(tester)):
+        print "skipping %s..."%prefix
+        continue
+
     if hasattr(tester, 'setUp'):
         try:
             tester.setUp()
@@ -24,6 +36,7 @@ for tester in testers:
 
     for sym in dir(tester):
         if sym.startswith('test_'):
+            name = prefix+sym[5:]
             try:
                 getattr(tester, sym)()
                 r = True
@@ -31,7 +44,7 @@ for tester in testers:
                 r = e
                 traceback.print_exc()
             finally:
-                results[prefix+sym] = r
+                results[name] = r
 
     if hasattr(tester, 'tearDown'):
         try:
