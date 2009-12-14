@@ -45,6 +45,8 @@ List of commands
 *  version
 *  volume
 
+Client API
+----------
 
 .. automodule:: zicbee_lib.commands
    :members:

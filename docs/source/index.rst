@@ -12,6 +12,10 @@ Contents:
    :maxdepth: 2
 
    zicbee_lib/index
+   zicbee/index
+
+.. todolist::
+
 
 Indices and tables
 ==================
