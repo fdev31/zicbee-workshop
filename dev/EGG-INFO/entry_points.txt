@@ -4,6 +4,6 @@ vlc = zicbee_vlc:Player
 gst = zicbee_gst:Player
 
 [console_scripts]
-wasp = zicbee.wasp:startup
+wasp = zicbee_lib.wasp:startup
 zicdb = zicbee.core:startup
 zicserve = zicbee.core:serve
