@@ -23,7 +23,7 @@ import %(mod)s
 executables = [
         ('zicserve', 'zicbee.core', 'zicbee.core.serve'),
         ('zicdb', 'zicbee.core', 'zicbee.core.startup'),
-        ('wasp', 'zicbee_lib.wasp', 'zicbee_lb.wasp.startup'),
+        ('wasp', 'zicbee_lib.wasp', 'zicbee_lib.wasp.startup'),
         ]
 
 def _try_chmod(n, m):
