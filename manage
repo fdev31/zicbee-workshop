@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import with_statement
 __all__ = ['Cloner', 'Workdir', 'Installer']
 
 import os
@@ -17,6 +18,29 @@ except ImportError:
 hivename = 'zicbee.zip'
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else '' # XXX: os independent way ?
 STATIC_EXTENSIONS = [] # for now sounds fine with pkg_resources :)
+
+try:
+    zipfile.ZipFile.extractall
+except AttributeError:
+    def _my_extractall(self, to_path, members):
+        if not members:
+            members = self.infolist()
+
+        dirs = []
+        for memb in members:
+            root = to_path
+            for d in memb.filename.split('/')[:-1]:
+                root += os.path.sep + d
+                if root not in dirs:
+                    dirs.append(root)
+                    if not os.path.exists(root):
+                        os.mkdir(root)
+
+            fullpath = os.path.join(to_path, memb.filename)
+            file(fullpath, "w").write(self.read(memb.filename))
+
+    zipfile.ZipFile.extractall = _my_extractall
+
 
 class Zipper(list):
     """ Object used to handle zip files """
@@ -43,7 +67,7 @@ class Cloner(object):
     If mercurial is installed, it will use it, if not, just get the latest version zipfile and unpack
     """
 
-    HOST = "http://zicbee.gnux.info/hg/index.cgi"
+    HOST = "http://zicbee.gnux.info/hg/index.cgy"
 
     def _hg_get(self, name):
         uri = "%s/%s"%(self.HOST, name)
