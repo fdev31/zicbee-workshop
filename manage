@@ -22,6 +22,7 @@ STATIC_EXTENSIONS = [] # for now sounds fine with pkg_resources :)
 try:
     zipfile.ZipFile.extractall
 except AttributeError:
+    # python2.5 compatibility
     def _my_extractall(self, to_path, members):
         if not members:
             members = self.infolist()
@@ -68,6 +69,7 @@ class Cloner(object):
     """
 
     HOST = "http://zicbee.gnux.info/hg/index.cgy"
+    BRANCH = "tip" # change to "default" to get the stable version
 
     def _hg_get(self, name):
         uri = "%s/%s"%(self.HOST, name)
@@ -76,10 +78,10 @@ class Cloner(object):
         except Exception, e:
             repo = self._hg_repo(name, False)
             self._hg_pull(repo, uri)
-            self._hg_up(repo, 'tip')
+            self._hg_up(repo, self.BRANCH)
 
     def _failsafe_get(self, name):
-        uri = "%s/%s/archive/tip.zip"%(self.HOST, name)
+        uri = "%s/%s/archive/%s.zip"%(self.HOST, name, self.BRANCH)
         zipname = "%s.zip"%name
         site = urllib.urlretrieve(uri, zipname)
         zp = Zipper(zipname)
