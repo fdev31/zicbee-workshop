@@ -264,6 +264,30 @@ class Installer(object):
             if os.system(cmd) != 0:
                 raise RuntimeError("Can't run %s!"%cmd)
 
+def change_branch(branch=None):
+    t = {'stable': 'default',
+            'dev': 'tip'}
+    rt = {'default': 'stable',
+            'tip': 'dev'}
+
+    if not branch:
+        print "Set to:", rt.get(Cloner.BRANCH, Cloner.BRANCH)
+        print "available choices: %s"%(', '.join(t.keys()))
+    else:
+        f = file(sys.argv[0], 'r+')
+        data = f.readlines()
+        suspect_line = [(i, l) for i, l in enumerate(data) if l.startswith('    BRANCH = ')]
+        if len(suspect_line) != 1:
+            raise RuntimeError('Incorrect "%s" program!'%sys.argv[0])
+        else:
+            suspect_line = suspect_line[0]
+
+        f.seek(0)
+        f.truncate()
+        name = t.get(branch, branch)
+        data[suspect_line[0]] = '    BRANCH = "%s"\n'%name
+        Cloner.BRANCH = name
+        f.writelines(data)
 
 if __name__ == '__main__':
     inst_tool = Installer()
@@ -285,6 +309,8 @@ pull    : Pull latest changes from server, clone if not already here,
           fallbacks to unversioned folder (from zip).
 mkbin   : Recreates the executable
 cleanup : Removes those .pyc & .pyo files from projects
+branch  : Sets the release mode (use branch.dev to switch to beta test mode ...)
+          WARN: changes will be saved into executable
 install : Easy_install develop zicbee related projects
 
 Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
@@ -293,6 +319,7 @@ Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0],
             'gen': inst_tool.std_gen,
             'fgen': inst_tool.force_gen,
             'mkbin': inst_tool.mkbin,
+            'branch': change_branch,
             'help': print_help
             }
 
