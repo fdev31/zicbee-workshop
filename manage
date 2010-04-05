@@ -68,7 +68,7 @@ class Cloner(object):
     If mercurial is installed, it will use it, if not, just get the latest version zipfile and unpack
     """
 
-    HOST = "http://zicbee.gnux.info/hg/index.cgy"
+    HOST = "http://zicbee.gnux.info/hg"
     BRANCH = "default" # change to "default" to get the stable version or tip to get latest
 
     def _hg_get(self, name):
