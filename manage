@@ -108,6 +108,7 @@ class Cloner(object):
             self._hg_repo = partial(mercurial.localrepo.instance, ui)
 
         except ImportError:
+            print "Can't use Mercurial :'("
             self.get = self._failsafe_get
         else:
             self.get = self._hg_get
