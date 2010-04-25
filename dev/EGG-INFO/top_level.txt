@@ -1,8 +1,0 @@
-zicbee
-zicbee_lib
-zicbee_vlc
-zicbee_mplayer
-web.py
-buzhug
-mutagen
-simplejson
