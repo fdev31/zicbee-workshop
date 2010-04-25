@@ -10,6 +10,7 @@ import tempfile
 import zipfile
 import mercurial
 from functools import partial
+
 try:
     import _genexecutables
 except ImportError:
@@ -18,6 +19,8 @@ except ImportError:
 hivename = 'zicbee.zip'
 ADM_PREFIX = 'sudo ' if os.system('sudo -v') == 0 else '' # XXX: os independent way ?
 STATIC_EXTENSIONS = [] # for now sounds fine with pkg_resources :)
+DEV_DIR = 'dev'
+DIST_DIR = 'dist'
 
 try:
     zipfile.ZipFile.extractall
@@ -168,35 +171,133 @@ class Installer(object):
         self.force_gen = partial(self._gen_package, forced=True)
         self.std_gen = partial(self._gen_package, forced=False)
 
+    def _mk_egg_info(self):
+        EMPTY, INI, MERGE, CAT, SCAT = xrange(5)
+        egg_files = {
+            'dependency_links.txt': MERGE,
+            'entry_points.txt': INI,
+            'not-zip-safe': ' ',
+            'PKG-INFO': 'pkg:zicbee',
+            'requires.txt': INI,
+            'SOURCES.txt': EMPTY,
+            'top_level.txt': SCAT,
+            'spec/depend': """metadata_version = '1.1'
+name = 'zicbee'
+version = '0.9'
+build = 1
+
+arch = None
+platform = 'linux2'
+osdist = None
+python = '2.5'
+packages = [
+  'buzhug 1.5',
+  'mutagen 1.18',
+  'web.py 0.32',
+  'zicbee-lib 0.6',
+  'zicbee-mplayer 0.9',
+  'zicbee-vlc 0.9',
+  'zicbee-gst 0.6',
+]
+            """,
+          }
+        def safe_readlines(path, mode='r'):
+            try:
+                return [l.strip() for l in file(path, mode).readlines()]
+            except IOError:
+                print "no %s"%path
+                return []
+
+        def info_name(s):
+            return s.replace('-', '_')+'.egg-info'
+
+        print os.getcwd()
+        for prop, data in egg_files.iteritems():
+            deps = dict((dep, safe_readlines(os.path.join(DEV_DIR, dep, info_name(dep), prop)))
+             for dep in self.softs)
+            for addon in self.deps:
+                deps[addon] = safe_readlines(os.path.join(DIST_DIR, addon, info_name(addon), prop))
+            if data == MERGE:
+                d = set()
+                for dep, content in deps.iteritems():
+                    d.update(content)
+                content = '\n'.join(sorted(d))
+                del d
+            elif data in (CAT, SCAT):
+                lines = []
+                for dep, content in deps.iteritems():
+                    lines.extend(content)
+                if data == SCAT:
+                    lines = sorted(lines)
+                content = '\n'.join(lines)
+                del lines
+            elif data == INI:
+                ini_file = {None:set()}
+                for dep, content in deps.iteritems():
+                    cur_section = None
+                    for line in content:
+                        if not line:
+                            continue
+                        if line[0] == '[':
+                            cur_section = line[1:-1].strip()
+                            if cur_section not in ini_file:
+                                ini_file[cur_section] = set()
+                            continue
+                        ini_file[cur_section].add(line)
+                result = []
+                for section in sorted(ini_file.iterkeys()):
+                    if section is not None:
+                        result.append('[%s]'%section)
+                    else:
+                        if not ini_file[section]:
+                            continue
+                    for line in sorted(ini_file[section]):
+                        result.append(line)
+                    result.append('')
+                content = '\n'.join(result)
+                del result
+                del ini_file
+            elif data == EMPTY:
+                content = ''
+            elif data.startswith('pkg:'):
+                for dep, content in deps.iteritems():
+                    if dep == data[4:]:
+                        content = '\n'.join(content)
+                        break
+            else:
+                content = data
+
+            file(os.path.join(DEV_DIR, 'EGG-INFO', prop), 'w').write(content)
+
+
     def _gen_package(self, *args, **kw):
         """ Will generate %s """%hivename
         forced = kw.pop('forced', False)
 
         # TODO: create "build" command that is called here
         j = os.path.join
-        dist = 'dist'
         with TempDir() as tempdir:
-            packages = self.deps + [j('dev', p) for p in self.softs]
+            packages = self.deps + [j(DEV_DIR, p) for p in self.softs]
             egg_name = 'bee.egg'
 
             zipper = Zipper(j(os.getcwd(), egg_name))
             for pkg in packages:
-                fullpath = j(dist, pkg)
+                fullpath = j(DIST_DIR, pkg)
                 egg = fullpath + '.egg'
                 # if forced remove everything
                 # BUT if you give arguments, only the specified ones are removed
                 if (forced and (not args or pkg.rsplit(os.sep, 1)[-1] in args)) or not os.path.exists(egg):
                     if not os.path.isfile(egg):
                         if not os.path.isdir(fullpath):
-                            os.system("easy_install -U -e -b '%s' '%s'"%(dist, pkg))
+                            os.system("easy_install -U -e -b '%s' '%s'"%(DIST_DIR, pkg))
                         for e in os.listdir(fullpath):
                             if e.endswith('.egg'):
-                                rm(j(fullpath, dist, e))
+                                rm(j(fullpath, DIST_DIR, e))
                     with Workdir(fullpath):
                         rm(j(fullpath, 'build'))
-                        rm(j(fullpath, 'dist'))
+                        rm(j(fullpath, DIST_DIR))
                         os.system('''python -c "import setuptools; execfile('setup.py')" bdist_egg''')
-                        egg_file = [j(fullpath, 'dist', e) for e in os.listdir('dist') if e.endswith('.egg')][0]
+                        egg_file = [j(fullpath, DIST_DIR, e) for e in os.listdir(DIST_DIR) if e.endswith('.egg')][0]
                     shutil.move(egg_file, egg)
                 print "extracting %s..."%egg
                 zipper.extract(egg, tempdir)
@@ -208,7 +309,8 @@ class Installer(object):
                 for d in dirs:
                     if d.startswith('test'):
                         rm(j(root, d))
-            shutil.copytree(j('dev', 'EGG-INFO'), j(tempdir, 'EGG-INFO'))
+            self._mk_egg_info()
+            shutil.copytree(j(DEV_DIR, 'EGG-INFO'), j(tempdir, 'EGG-INFO'))
             static_files = []
             for r, d, f in os.walk(tempdir):
                 for n in f:
@@ -339,7 +441,7 @@ Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0],
             per_proj_cmds.append((cmd, args))
 
     if per_proj_cmds:
-        with Workdir('dev'):
+        with Workdir(DEV_DIR):
             commands = [(getattr(inst_tool, cmd), args) for cmd, args in per_proj_cmds if hasattr(inst_tool, cmd)]
             for soft in inst_tool.softs:
                 for fn, args in commands:
