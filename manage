@@ -253,7 +253,7 @@ packages = [
                 for dep, content in deps.iteritems():
                     cur_section = None
                     for line in content:
-                        if not line:
+                        if not line or line.startswith('eggsecutable'):
                             continue
                         if line[0] == '[':
                             cur_section = line[1:-1].strip()
