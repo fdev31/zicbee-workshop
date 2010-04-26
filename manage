@@ -11,6 +11,17 @@ import zipfile
 import mercurial
 from functools import partial
 
+# Ensure correct dist folder
+try:
+    os.mkdir('dist')
+except OSError:
+    pass
+try:
+    os.unlink(os.path.join('dist', 'dev'))
+except OSError:
+    pass
+os.symlink(os.path.join('..', 'dev'), os.path.join('dist', 'dev'))
+
 try:
     import _genexecutables
 except ImportError:
