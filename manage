@@ -195,8 +195,8 @@ class Installer(object):
             'entry_points.txt': INI,
             'not-zip-safe': ' ',
             'PKG-INFO': 'pkg:zicbee',
-            'requires.txt': INI,
-            'SOURCES.txt': EMPTY,
+            'requires.txt': EMPTY,
+            'SOURCES.txt': SCAT,
             'top_level.txt': SCAT,
             'spec/depend': """metadata_version = '1.1'
 name = 'zicbee'
