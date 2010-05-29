@@ -331,6 +331,8 @@ packages = [
             static_files = []
             for r, d, f in os.walk(tempdir):
                 for n in f:
+                    if n == '_speedups.py':
+                        continue
                     ext = n.rsplit('.', 1)[-1]
                     if ext in STATIC_EXTENSIONS:
                         static_files.append((j(r,n), tempdir))
