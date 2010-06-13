@@ -413,7 +413,7 @@ def change_branch(branch=None):
 
 if __name__ == '__main__':
     inst_tool = Installer()
-    default_cmds = ('pull', 'cleanup', 'mkbin', 'gen')
+    default_cmds = ('pull', 'cleanup', 'mkbin', 'fgen')
     commands = sys.argv[1:] if len(sys.argv)>1 else default_cmds
     l = []
     def print_help():
@@ -424,7 +424,7 @@ This is the ideal for the first run,
 replace "gen" with "fgen" or remove all .egg files for a full update.
 
 Commands:
-gen     : Generates the %s, re-build project from sources if of the sources eggs are missing
+gen     : Generates the %s, re-build project from sources if on of the source egg is missing
 fgen    : Generates the %s, re-build project from sources unconditionally
           you can limit the rebuilding to specified packages. Ex: fgen.zicbee-lib.zicbee
 pull    : Pull latest changes from server, clone if not already here,
