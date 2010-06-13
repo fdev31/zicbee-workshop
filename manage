@@ -8,7 +8,6 @@ import urllib
 import shutil
 import tempfile
 import zipfile
-import mercurial
 from functools import partial
 
 # Ensure correct dist folder
@@ -90,7 +89,7 @@ class Cloner(object):
         workshop = (name == 'zicbee-workshop')
         try:
             if workshop:
-                name = "."
+                name = os.path.curdir
                 raise Exception("Workshop can't be cloned")
             self._hg_clone(uri)
         except Exception, e:
@@ -111,8 +110,18 @@ class Cloner(object):
             if not yn or yn[0].lower() != 'y':
                 print "Not overwriting, install mercurial to have good update support."
                 return
-        shutil.rmtree(name)
-        os.rename( dirname, name)
+        if name == 'zicbee-workshop':
+            prefix_len = len(dirname) + 1
+            for root, dirs, files in os.walk(dirname):
+                for fname in files:
+                    src = os.path.join(root, fname)
+                    dst = os.path.join(os.path.curdir, root[prefix_len:], fname)
+                    if os.path.isfile(src):
+                        shutil.copyfile( src, dst )
+            shutil.rmtree(dirname)
+        else:
+            shutil.rmtree(name)
+            os.rename( dirname, name)
 
     def __init__(self):
         try:
