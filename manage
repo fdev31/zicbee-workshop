@@ -87,7 +87,11 @@ class Cloner(object):
 
     def _hg_get(self, name):
         uri = "%s/%s"%(self.HOST, name)
+        workshop = (name == 'zicbee-workshop')
         try:
+            if workshop:
+                name = "."
+                raise Exception("Workshop can't be cloned")
             self._hg_clone(uri)
         except Exception, e:
             repo = self._hg_repo(name, False)
@@ -460,8 +464,13 @@ Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0],
             per_proj_cmds.append((cmd, args))
 
     if per_proj_cmds:
+        commands = [(getattr(inst_tool, cmd), args) for cmd, args in per_proj_cmds if hasattr(inst_tool, cmd)]
+
+        # pull workshop
+        if inst_tool.pull in (t[0] for t in  commands):
+            inst_tool.pull('zicbee-workshop')
+
         with Workdir(DEV_DIR):
-            commands = [(getattr(inst_tool, cmd), args) for cmd, args in per_proj_cmds if hasattr(inst_tool, cmd)]
             for soft in inst_tool.softs:
                 for fn, args in commands:
                     name = "%s.%s"%(soft, fn.func_name)
