@@ -1,7 +1,8 @@
 # version 2
-dev/zicbee = http://zicbee.gnux.info/hg/zicbee
-dev/zicbee-lib = http://zicbee.gnux.info/hg/zicbee-lib
-dev/zicbee-mplayer = http://zicbee.gnux.info/hg/zicbee-mplayer
-dev/zicbee-vlc = http://zicbee.gnux.info/hg/zicbee-vlc
-dev/zicbee-gst = http://zicbee.gnux.info/hg/zicbee-gst
+
+dev/zicbee = http://zicbee.gnux.info/hg/zicbee#default
+dev/zicbee-lib = http://zicbee.gnux.info/hg/zicbee-lib#default
+dev/zicbee-mplayer = http://zicbee.gnux.info/hg/zicbee-mplayer#default
+dev/zicbee-vlc = http://zicbee.gnux.info/hg/zicbee-vlc#default
+dev/zicbee-gst = http://zicbee.gnux.info/hg/zicbee-gst#default
 website = http://zicbee.gnux.info/hg/zicbee-website/
