@@ -1,5 +1,5 @@
-dev/zicbee = dev/zicbee
-zicbee-lib = dev/zicbee-lib
-zicbee-mplayer = dev/zicbee-mplayer
-zicbee-vlc = dev/zicbee-vlc
+dev/zicbee = zicbee
+dev/zicbee-lib = zicbee-lib
+dev/zicbee-mplayer = zicbee-mplayer
+dev/zicbee-vlc = zicbee-vlc
 dev/zicbee-gst = zicbee-gst
