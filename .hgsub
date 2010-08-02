@@ -1,5 +1,6 @@
-dev/zicbee = dev/zicbee
-dev/zicbee-lib = dev/zicbee-lib
-dev/zicbee-mplayer = dev/zicbee-mplayer
-dev/zicbee-vlc =dev/zicbee-vlc
-dev/zicbee-gst =dev/zicbee-gst
+dev/zicbee = http://zicbee.gnux.info/hg/zicbee
+dev/zicbee-lib = http://zicbee.gnux.info/hg/zicbee-lib
+dev/zicbee-mplayer = http://zicbee.gnux.info/hg/zicbee-mplayer
+dev/zicbee-vlc = http://zicbee.gnux.info/hg/zicbee-vlc
+dev/zicbee-gst = http://zicbee.gnux.info/hg/zicbee-gst
+website = http://zicbee.gnux.info/hg/zicbee-website/
