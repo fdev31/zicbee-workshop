@@ -101,9 +101,9 @@ def add_menu(icon, *connect):
     item.connect('activate', *connect)
     menu.append(item)
 
-add_menu(gtk.STOCK_MEDIA_PAUSE, pause_cb)
 add_menu(gtk.STOCK_MEDIA_NEXT, next_cb)
 add_menu(gtk.STOCK_MEDIA_PREVIOUS, prev_cb)
+add_menu(gtk.STOCK_MEDIA_PAUSE, pause_cb)
 add_menu(gtk.STOCK_ABOUT, about_cb)
 add_menu(gtk.STOCK_MEDIA_PLAY, play_cb)
 add_menu(gtk.STOCK_CONNECT, startserver_cb)
