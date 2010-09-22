@@ -1,4 +1,23 @@
 #!/usr/bin/env python
+
+# Bootstrap
+import os
+import sys
+DB_DIR = os.path.expanduser(os.getenv('ZICDB_PATH') or '~/.zicdb')
+exists = os.path.exists
+j = os.path.join
+my_dir = [p for p in sys.path if exists(j(p, 'bee.egg'))]
+my_dir.extend(os.path.split(p)[0] for p in sys.path if exists(j(p, os.path.pardir, 'bee.egg')))
+if not(my_dir):
+    print "**ERROR** Unable to find bee.egg and associated files"
+    sys.exit(1)
+elif len(my_dir) > 1:
+    print "**WARNING** more than zicbee instances are found !"
+
+my_dir = my_dir[0]
+sys.path[0:0] = [j(my_dir, 'bee.egg')]
+# /Bootstrap
+
 __version__ = "1.0"
 import gtk
 import os
@@ -8,6 +27,7 @@ import socket
 socket.setdefaulttimeout(5)
 
 from zicbee_lib.commands import execute
+from zicbee_lib.resources import resource_filename
 
 
 def play_cb(widget, data = None):
@@ -89,7 +109,7 @@ add_menu(gtk.STOCK_MEDIA_PLAY, play_cb)
 add_menu(gtk.STOCK_CONNECT, startserver_cb)
 add_menu(gtk.STOCK_QUIT, quit_cb, statusIcon)
 
-icon = "/home/fab/bee/dev/zicbee/zicbee/ui/notify/bee_icon.png"
+icon = resource_filename('zicbee.ui.notify', 'bee_icon.png')
 statusIcon.set_from_file(icon)
 statusIcon.set_tooltip("Zicbee")
 statusIcon.connect('activate', pause_cb)
