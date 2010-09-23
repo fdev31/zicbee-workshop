@@ -46,18 +46,18 @@ def zic_pause(word, word_eol, userdata):
 
 def zicbee_command_cb(word, word_eol, userdata):
     try:
-	if word[1].lower() == 'show':
-        return zic_show(word[1:], word_eol[1:], userdata)
-    if word[1].lower() == 'next':
-        return zic_next(word[1:], word_eol[1:], userdata)
-    if word[1].lower() == 'prev':
-        return zic_prev(word[1:], word_eol[1:], userdata)
-    if word[1].lower() == 'pause':
-        return zic_pause(word[1:], word_eol[1:], userdata)
-    if word[1].lower() == 'help':
-        print zicbee_command_help_text
+        if word[1].lower() == 'show':
+            return zic_show(word[1:], word_eol[1:], userdata)
+        if word[1].lower() == 'next':
+            return zic_next(word[1:], word_eol[1:], userdata)
+        if word[1].lower() == 'prev':
+            return zic_prev(word[1:], word_eol[1:], userdata)
+        if word[1].lower() == 'pause':
+            return zic_pause(word[1:], word_eol[1:], userdata)
+        if word[1].lower() == 'help':
+            print zicbee_command_help_text
     except IndexError:
-	print zicbee_command_help_text
+        print zicbee_command_help_text
     return xchat.EAT_ALL
 
 xchat.hook_command("zic", zicbee_command_cb, help=zicbee_command_help_text)
