@@ -5,6 +5,7 @@ zicbee_command_help_text = """zicbee control. Usage:
 /zic show    Prints currently playing on zicbee (not yet)
 /zic prev    Change to the previous song
 /zic next    Change to the next song
+/zic add     Adds the latest notification to your playlist
 /zic pause   Toggle play/pause mode"""
 
 __module_name__ = "zicbee_xchat"
@@ -14,6 +15,9 @@ __module_description__ = "python module for controlling zicbee from xchat"
 import xchat
 import urllib
 import socket
+
+memory = {
+}
 
 def _get_ip():
     s = socket.socket()
@@ -44,8 +48,12 @@ def zic_pause(word, word_eol, userdata):
     urllib.urlopen('%s/pause'%MY_IP)
     return xchat.EAT_ALL
 
+
 def zicbee_command_cb(word, word_eol, userdata):
     try:
+        if word[1].lower() == 'add':
+            urllib.urlopen(memory['latest']).read()
+            return xchat.EAT_ALL
         if word[1].lower() == 'show':
             return zic_show(word[1:], word_eol[1:], userdata)
         if word[1].lower() == 'next':
@@ -61,5 +69,20 @@ def zicbee_command_cb(word, word_eol, userdata):
     return xchat.EAT_ALL
 
 xchat.hook_command("zic", zicbee_command_cb, help=zicbee_command_help_text)
+
+def append_uri(w1, w2, w3):
+    txt = w2[1]
+    if '/db/get/song' in txt and '?id=' in txt:
+        uri = txt.split('http://', 1)[1].split(None, 1)[0]
+        host = uri.split('/', 1)[0]
+        zic_pattern = uri.rsplit('?', 1)[1].replace('=', ':')
+        new_url = "http://localhost:9090/search?"+urllib.urlencode({
+            'pattern': zic_pattern,
+            'host': host,
+        })
+        memory['latest'] = new_url
+    return xchat.EAT_NONE
+
+xchat.hook_print("Channel Action", append_uri)
 
 xchat.prnt('zicbee_xchat v0.1 loaded... for help type /zic help')
