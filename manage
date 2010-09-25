@@ -221,7 +221,7 @@ platform = 'linux2'
 osdist = None
 python = '2.5'
 packages = [
-  'buzhug 1.5',
+  'buzhug 1.8',
   'mutagen 1.18',
   'web.py 0.32',
   'zicbee-lib 0.6',
