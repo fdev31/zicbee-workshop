@@ -33,7 +33,7 @@ def _get_infos():
     return infos_string
 
 def zic_show(word, word_eol, userdata):
-    xchat.command('me is listening to' + _get_infos())
+    xchat.command('me is enjoying ' + _get_infos())
     return xchat.EAT_ALL
 
 def zic_next(word, word_eol, userdata):
