@@ -77,7 +77,7 @@ def append_uri(w1, w2, w3):
         host = uri.split('/', 1)[0]
         zic_pattern = uri.rsplit('?', 1)[1].replace('=', ':')
         new_url = "http://localhost:9090/search?"+urllib.urlencode({
-            'pattern': zic_pattern,
+            'pattern': zic_pattern+" pls: +#",
             'host': host,
         })
         memory['latest'] = new_url
