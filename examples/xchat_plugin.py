@@ -48,11 +48,28 @@ def zic_pause(word, word_eol, userdata):
     urllib.urlopen('%s/pause'%MY_IP)
     return xchat.EAT_ALL
 
+def _get_host_id_from_uri(uri):
+        host = uri.split('http://', 1)[1].split('/', 1)[0]
+        zic_pattern = uri.rsplit('?', 1)[1].replace('=', ':')
+        return (zic_pattern, host)
+
+def _pattern_host_uri_injector(pattern, host):
+        return ("http://localhost:9090/search?"+urllib.urlencode({
+            'pattern': pattern+" pls: +#",
+            'host': host,
+        }))
 
 def zicbee_command_cb(word, word_eol, userdata):
     try:
         if word[1].lower() == 'add':
-            urllib.urlopen(memory['latest']).read()
+            if len(word) == 3:
+                pattern, host = _get_host_id_from_uri(word[-1])
+            else:
+                if not 'latest' in memory:
+                    print "Nobody talked about his music recently !"
+                    return
+                pattern, host = memory['latest']
+            urllib.urlopen(_pattern_host_uri_injector(pattern, host)).read()
             return xchat.EAT_ALL
         if word[1].lower() == 'show':
             return zic_show(word[1:], word_eol[1:], userdata)
@@ -73,14 +90,8 @@ xchat.hook_command("zic", zicbee_command_cb, help=zicbee_command_help_text)
 def append_uri(w1, w2, w3):
     txt = w2[1]
     if '/db/get/song' in txt and '?id=' in txt:
-        uri = txt.split('http://', 1)[1].split(None, 1)[0]
-        host = uri.split('/', 1)[0]
-        zic_pattern = uri.rsplit('?', 1)[1].replace('=', ':')
-        new_url = "http://localhost:9090/search?"+urllib.urlencode({
-            'pattern': zic_pattern+" pls: +#",
-            'host': host,
-        })
-        memory['latest'] = new_url
+        uri = 'http://'+(txt.split('http://', 1)[1].split(None, 1)[0])
+        memory['latest'] = _get_host_id_from_uri(uri)
     return xchat.EAT_NONE
 
 xchat.hook_print("Channel Action", append_uri)
