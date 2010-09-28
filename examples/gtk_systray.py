@@ -15,7 +15,8 @@ elif len(my_dir) > 1:
     print "**WARNING** more than zicbee instances are found !"
 
 my_dir = my_dir[0]
-sys.path[0:0] = [j(my_dir, 'bee.egg')]
+egg_file = j(my_dir, 'bee.egg')
+sys.path[0:0] = [egg_file]
 # /Bootstrap
 
 __version__ = "1.0"
@@ -49,7 +50,7 @@ def popup_menu_cb(widget, button, time, data = None):
 
 
 def startserver_cb(widget, data=None):
-    cmd = '%s -c "from zicbee.core import serve; serve()" &'%sys.executable
+    cmd = 'PYTHONPATH="%s" %s -c "from zicbee.core import serve; serve()" &'%(egg_file, sys.executable)
     os.system(cmd)
 
 
