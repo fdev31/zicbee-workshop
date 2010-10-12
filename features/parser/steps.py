@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath( os.path.join(os.getcwd(),os.path.pardir, 'bee.egg')) )
 
-from zicbee_lib.parser import parse_string as parsestring, tokens2python
+from zicbee_lib.parser import parse_string as parsestring, tokens2python, AUTO
 import re
 
 E = AssertionError
@@ -67,4 +67,17 @@ def check_python(step, ref_code):
     gen = tokens2python(world.tokens)
     if gen.strip() != ref_code.strip():
         raise AssertionError('Expects: *%r*\nGot: *%r*'%(ref_code, gen))
+
+@step('auto is (\w+)')
+def check_auto(step, w):
+    e = eval(w.strip().title())
+    for tok in world.tokens:
+        if tok == AUTO:
+            v = True
+            break
+    else:
+        v = False
+
+    if e != v:
+        raise AssertionError('Expected %r, got %r'%(e, v))
 
