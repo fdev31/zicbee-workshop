@@ -4,21 +4,23 @@ Scenario: test tag groupping
     Parse artist: (Pearl Jam or The radiohead)
     The tokens are
         | tag | value |
-        | artist | Pearl Jam |
+        | (  | - |
+        | artist | pearl jam |
         | or | - |
-        | artist | The radiohead |
+        | artist | the radiohead |
+        | )  | - |
 
 # weired but tested behavior,
 # all () in that special case are removed !
 
 Scenario: test tag groupping
-    Parse artist: ((((Pearl Jam or The radiohead))))
+    Parse Artist: ((((Pearl Jam or The radiohead))))
     The tokens are
         | tag | value |
         | ( | - |
-        | artist | Pearl Jam |
+        | Artist | Pearl Jam |
         | or | - |
-        | artist | The radiohead |
+        | Artist | The radiohead |
         | ) | - |
 
 Scenario: test tag groupping

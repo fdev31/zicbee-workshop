@@ -2,35 +2,35 @@ Feature: operators parsing
     Just let some operators to be tested
 
     Scenario: check simple operator
-        Parse artist: Toto or artist: Ben
+        Parse Artist: Toto or artist: Ben
         The tokens are:
             | tag | value |
-            | artist | Toto |
+            | Artist | Toto |
             | or | - |
-            | artist | Ben |
+            | artist | ben |
 
         Parse artist:The rolling and album: Toto or artist: Ben
         The tokens are:
             | tag | value |
-            | artist | The rolling |
+            | artist | the rolling |
             | and | - |
-            | album | Toto |
+            | album | toto |
             | or | - |
-            | artist | Ben |
+            | artist | ben |
 
         Parse title: A       and    artist: b
         The tokens are:
             | tag | value |
-            | title | A |
+            | title | a |
             | and | - |
             | artist | b |
 
         Parse artist:The rolling and album: Toto or artist: Ben
         The tokens are:
             | tag | value |
-            | artist | The rolling |
+            | artist | the rolling |
             | and | - |
-            | album | Toto |
+            | album | toto |
             | or | - |
-            | artist | Ben |
+            | artist | ben |
 

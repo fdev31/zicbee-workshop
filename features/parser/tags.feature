@@ -13,23 +13,23 @@ Feature: artists parsing
         Parse artist:Björk
         The tokens are:
             |   tag |   value   |
-            |  artist |   Björk   |
+            |  artist |   björk   |
 
         Parse artist:  Bjork
         The tokens are:
             |   tag |   value   |
-            |   artist  |   Bjork   |
+            |   artist  |   bjork   |
         The python code is u'bjork' in artist.lower()
 
-        Parse   artist:  Björk    
+        Parse   artist:  Björk
         The tokens are:
             |   tag |   value   |
-            |   artist  |   Björk   |
+            |   artist  |   björk   |
 
-        Parse     artist:   The Rolling Stones   
+        Parse     artist:   The Rolling Stones
         The tokens are:
             |   tag |   value   |
-            |   artist  |   The Rolling Stones |
+            |   artist  |   the rolling stones |
 
     Scenario: parse playlist tag
         Parse artist: toto pls: #
@@ -38,7 +38,7 @@ Feature: artists parsing
             | artist | toto |
             | pls | # |
         The python code is u'toto' in artist.lower()
-        
+
 
     Scenario: parse playlist tag
         Parse  pls: # artist: toto auto: 10
@@ -48,5 +48,5 @@ Feature: artists parsing
             | artist | toto |
             | auto | 10 |
         The python code is u'toto' in artist.lower()
-        
+
 

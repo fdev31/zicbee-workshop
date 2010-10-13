@@ -30,11 +30,11 @@ Feature: implicit operators
             | and | - |
             | artist | titi |
             | or | - |
-            | artist | A |
+            | artist | a |
             | and | - |
-            | artist | B |
+            | artist | b |
             | and | - |
-            | artist | C |
+            | artist | c |
             | and | - |
-            | artist | D |
+            | artist | d |
 
