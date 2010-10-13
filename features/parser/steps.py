@@ -65,8 +65,16 @@ def just_a_comment(step):
 @step('python code is\s(.*)$')
 def check_python(step, ref_code):
     gen = tokens2python(world.tokens)
-    if gen.strip() != ref_code.strip():
-        raise AssertionError('Expects: *%r*\nGot: *%r*'%(ref_code, gen))
+    world.variables = gen[1]
+    if gen[0].strip() != ref_code.strip():
+        raise AssertionError('Expects: *%r*\nGot: *%r*'%(ref_code, gen[0]))
+
+@secured
+@step('variables are:')
+def check_vars(step):
+    ref = dict((e['name'], e['val']) for e in step.hashes)
+    if world.variables != ref:
+        raise AssertionError('Variables mismatch, given: %r expected: %r'%(world.variables, ref))
 
 @step('auto is (\w+)')
 def check_auto(step, w):

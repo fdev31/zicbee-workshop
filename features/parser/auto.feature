@@ -8,7 +8,12 @@ Scenario: basic usage in the middle
  | auto: | - |
  | or | - |
  | artist | blah |
- The python code is artist == u'IAM'  or u'blah' in artist.lower()
+ The python code is artist == v0  or v1 in artist.lower()
+ The variables are:
+ | name | val |
+ | v0   | IAM |
+ | v1 | blah |
+
  auto is true
 # Note the additional space indicating a special keyword was used (bug?)
 
@@ -39,6 +44,10 @@ Scenario: basic usage in the middle + implicit op (Unsupported)
  | auto: | - |
  | and | - |
  | artist | blah |
- The python code is artist == u'IAM'  and u'blah' in artist.lower()
+ The python code is artist == v0  and v1 in artist.lower()
+ The variables are:
+ | name | val |
+ | v0   | IAM |
+ | v1 | blah |
 # Note the additional space indicating a special keyword was used (bug?)
 
