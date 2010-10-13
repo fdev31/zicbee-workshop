@@ -73,6 +73,10 @@ def check_python(step, ref_code):
 @step('variables are:')
 def check_vars(step):
     ref = dict((e['name'], e['val']) for e in step.hashes)
+    for k, v in ref.iteritems():
+        if v.isdigit():
+            ref[k] = int(v)
+
     if world.variables != ref:
         raise AssertionError('Variables mismatch, given: %r expected: %r'%(world.variables, ref))
 

@@ -7,7 +7,10 @@ Feature: artists parsing
         The tokens are:
             |   tag |   value   |
             |  Artist |   Björk   |
-        The python code is u'Bj\xf6rk' in artist
+        The python code is v0 in artist
+        and the variables are:
+        | name | val |
+        | v0   |Björk |
 
     Scenario: parse various artists
         Parse artist:Björk
@@ -19,7 +22,10 @@ Feature: artists parsing
         The tokens are:
             |   tag |   value   |
             |   artist  |   bjork   |
-        The python code is u'bjork' in artist.lower()
+        The python code is v0 in artist.lower()
+        and the variables are:
+        | name | val |
+        | v0  | bjork |
 
         Parse   artist:  Björk
         The tokens are:
@@ -37,7 +43,10 @@ Feature: artists parsing
             | tag | value |
             | artist | toto |
             | pls | # |
-        The python code is u'toto' in artist.lower()
+        The python code is v0 in artist.lower()
+        and the variables are:
+        | name | val |
+        | v0 | toto |
 
 
     Scenario: parse playlist tag
@@ -47,6 +56,9 @@ Feature: artists parsing
             | pls | # |
             | artist | toto |
             | auto | 10 |
-        The python code is u'toto' in artist.lower()
+        The python code is v0 in artist.lower()
+        and the variables are:
+        | name | val |
+        | v0 | toto |
 
 
