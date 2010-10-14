@@ -2,54 +2,42 @@ Feature: test python code generation
 
 Scenario: test simple equalities
     Parse artist: =Toto and album: (old or may)
-    The python code is artist.lower() == v0 and ( v1 in album.lower() or v2 in album.lower() )
+    The python code is artist.lower() == v0 and ( u'old' in album.lower() or u'may' in album.lower() )
     and the variables are:
     | name | val |
     | v0 | toto |
-    | v1 | old |
-    | v2 | may |
 
 Scenario: test more complex equalities
     Parse artist: =Toto and album: (old or may)
-    The python code is artist.lower() == v0 and ( v1 in album.lower() or v2 in album.lower() )
+    The python code is artist.lower() == v0 and ( u'old' in album.lower() or u'may' in album.lower() )
     and the variables are:
     | name | val |
     | v0 | toto |
-    | v1 | old |
-    | v2 | may |
 
 Scenario: test more complex equalities
     Parse (artist: =Toto or album: winter) and album: (old or may)
-    The python code is ( artist.lower() == v0 or v1 in album.lower() ) and ( v2 in album.lower() or v3 in album.lower() )
+    The python code is ( artist.lower() == v0 or u'winter' in album.lower() ) and ( u'old' in album.lower() or u'may' in album.lower() )
     and the variables are:
     | name | val |
     | v0 | toto |
-    | v1 | winter |
-    | v2 | old |
-    | v3 | may |
 
 Scenario: test more complex equalities
     Parse (artist: =Toto and ! album: winter) and album: (old or may)
-    The python code is ( artist.lower() == v0 and not v1 in album.lower() ) and ( v2 in album.lower() or v3 in album.lower() )
+    The python code is ( artist.lower() == v0 and not u'winter' in album.lower() ) and ( u'old' in album.lower() or u'may' in album.lower() )
     and the variables are:
     | name | val |
     | v0 | toto |
-    | v1 | winter |
-    | v2 | old |
-    | v3 | may |
 
 Scenario: test not keyword "!"
     Parse ! artist: dave
-    The python code is not v0 in artist.lower()
+    The python code is not u'dave' in artist.lower()
     and the variables are:
     | name | val |
-    | v0 | dave |
 
     Parse ! Artist: dave
-    The python code is not v0 in artist
+    The python code is not u'dave' in artist
     and the variables are:
     | name | val |
-    | v0 | dave |
 
     Parse !artist: =dave
     The python code is not artist.lower() == v0 
@@ -58,12 +46,10 @@ Scenario: test not keyword "!"
     | v0 | dave |
 
     Parse (!artist:=dave  album:sky)or(Album:Moon)
-    The python code is ( not artist.lower() == v0 and v1 in album.lower() ) or ( v2 in album )
+    The python code is ( not artist.lower() == v0 and u'sky' in album.lower() ) or ( u'Moon' in album )
     and the variables are:
     | name | val |
     | v0 | dave |
-    | v1 | sky |
-    | v2 | Moon |
 
     Parse length: 60
     The python code is v0 <= length <= v1
@@ -107,12 +93,10 @@ Scenario: test not keyword "!"
 
 Scenario: test implicit "or" between ()
     Parse (!artist:=dave  album:sky)(Album:Moon)
-    The python code is ( not artist.lower() == v0 and v1 in album.lower() ) or ( v2 in album )
+    The python code is ( not artist.lower() == v0 and u'sky' in album.lower() ) or ( u'Moon' in album )
     and the variables are:
     | name | val |
     | v0 | dave |
-    | v1 | sky |
-    | v2 | Moon |
 
 Scenario: group and equality prefix
   Parse Artist: (=Noir désir or =Björk)
