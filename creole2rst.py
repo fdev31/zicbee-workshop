@@ -140,7 +140,7 @@ def optwrap(text):
                 newlines += 1
     return result
 
-TITLE_UNDERLININGS = "$=-~:."
+TITLE_UNDERLININGS = "$=-+.:~"
 
 def hn(tag):
     if tag[0] == 'h' and len(tag) == 2:
@@ -228,7 +228,11 @@ class _html2text(sgmllib.SGMLParser):
             if start:
                 self.o('\n')
             else:
-                self.o('\n' + TITLE_UNDERLININGS[hn(tag)]*len(self.last_output))
+                if self.last_output == ')':
+                    sz = len(self.outtext.rsplit('\n', 1)[1])
+                else:
+                    sz = len(self.last_output)
+                self.o('\n' + TITLE_UNDERLININGS[hn(tag)]*sz)
                 self.p()
 
         if tag in ['p', 'div']: self.p()
@@ -444,11 +448,9 @@ def optwrap(text):
     return '\n'.join(output)
 
 if __name__ == "__main__":
-    try:
-        import creole
-    except ImportError:
-        print "Install python-creole and run again."
-        raise SystemExit(1)
+    from creole import creole2html
+#    from creoleparser import text2html as creole2html
+
 
     data = None
     if sys.argv[1:]:
@@ -462,8 +464,9 @@ if __name__ == "__main__":
     if not data:
         print "Syntax: %s <creole filename>\n\tyou can alternatively pipe creole content..."
     #~ creole2html(data)
-    data = creole.creole2html(unicode(data))
+    data = creole2html(unicode(data))
+    file('/tmp/out.html', 'w').write(data)
     #~ html2text_file(data)
     rest = optwrap(html2text_file(data, None))
-    sys.stdout.write(rest.encode('ascii', 'replace'))
+    sys.stdout.write(rest.encode('ascii', 'replace').replace('::\n', '::\n\n'))
 
