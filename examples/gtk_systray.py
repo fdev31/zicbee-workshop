@@ -20,15 +20,21 @@ sys.path[0:0] = [egg_file]
 # /Bootstrap
 
 __version__ = "1.0"
+
 import gtk
 import os
 import sys
 #import pygtk
+import gobject
 import socket
 socket.setdefaulttimeout(5)
 
 from zicbee_lib.commands import execute
 from zicbee_lib.resources import resource_filename
+from zicbee_lib.core import get_infos as _get_infos
+
+def get_infos():
+    return '%(artist)s -- %(title)s\n%(album)s'%_get_infos()
 
 
 def play_cb(widget, data = None):
@@ -102,6 +108,14 @@ def add_menu(icon, *connect):
     item.connect('activate', *connect)
     menu.append(item)
 
+def _set_tooltip(*args):
+    try:
+        statusIcon.set_tooltip(get_infos())
+    except Exception, e:
+        print repr(e)
+    finally:
+        return True
+
 add_menu(gtk.STOCK_MEDIA_NEXT, next_cb)
 add_menu(gtk.STOCK_MEDIA_PREVIOUS, prev_cb)
 add_menu(gtk.STOCK_MEDIA_PAUSE, pause_cb)
@@ -116,5 +130,7 @@ statusIcon.set_tooltip("Zicbee")
 statusIcon.connect('activate', pause_cb)
 statusIcon.connect('popup-menu', popup_menu_cb, menu)
 statusIcon.set_visible(True)
+
+gobject.timeout_add(5000, _set_tooltip)
 
 gtk.main()
