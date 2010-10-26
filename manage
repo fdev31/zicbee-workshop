@@ -10,6 +10,8 @@ import tempfile
 import zipfile
 from functools import partial
 
+first_run = not os.path.exists('bee.egg')
+
 # Ensure correct dist folder
 try:
     os.mkdir('dist')
@@ -500,3 +502,5 @@ Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0],
     for cmd, args in global_cmds:
         cmd_handlers[cmd](*args)
 
+    if first_run:
+        print "Take a look to %s folder or the website (http://zicbee.gnux.info) to read more."%os.path.join('dev','zicbee')
