@@ -89,16 +89,19 @@ class Cloner(object):
     def _hg_get(self, name):
         uri = "%s/%s"%(self.HOST, name)
         workshop = (name == 'zicbee-workshop')
-        try:
+
+        if not workshop or not os.path.exists('.hg'):
             self._hg_clone(uri)
             if workshop:
                 os.rename( os.path.join(name, '.hg'), '.hg' )
                 shutil.rmtree(name)
-                name = os.path.curdir
-        finally:
-            repo = self._hg_repo(name, False)
-            self._hg_pull(repo, uri)
-            self._hg_up(repo, self.BRANCH)
+
+        if workshop:
+            name = os.path.curdir
+
+        repo = self._hg_repo(name, False)
+        self._hg_pull(repo, uri)
+        self._hg_up(repo, self.BRANCH)
 
     def _failsafe_get(self, name):
         uri = "%s/%s/archive/%s.zip"%(self.HOST, name, self.BRANCH)
