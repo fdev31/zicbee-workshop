@@ -90,11 +90,12 @@ class Cloner(object):
         uri = "%s/%s"%(self.HOST, name)
         workshop = (name == 'zicbee-workshop')
         try:
-            if workshop:
-                name = os.path.curdir
-                raise Exception("Workshop can't be cloned")
             self._hg_clone(uri)
-        except Exception, e:
+            if workshop:
+                os.rename( os.path.join(name, '.hg'), '.hg' )
+                shutil.rmtree(name)
+                name = os.path.curdir
+        finally:
             repo = self._hg_repo(name, False)
             self._hg_pull(repo, uri)
             self._hg_up(repo, self.BRANCH)
