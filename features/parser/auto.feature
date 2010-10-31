@@ -5,7 +5,7 @@ Scenario: basic usage in the middle
  The tokens are:
  | tag | value |
  | Artist | =IAM |
- | auto: | - |
+ | auto | - |
  | or | - |
  | artist | blah |
  The python code is artist == v0  or u'blah' in artist.lower()
@@ -26,13 +26,13 @@ Scenario: at the end
  The tokens are:
  |tag| value|
  |artist | toto |
- | auto: | - |
+ | auto | - |
 
 Scenario: In the beginning
  Parse auto: artist: toto
  The tokens are:
  |tag| value|
- | auto: | - |
+ | auto | - |
  |artist | toto |
 
 Scenario: basic usage in the middle + implicit op (Unsupported)
@@ -40,7 +40,7 @@ Scenario: basic usage in the middle + implicit op (Unsupported)
  The tokens are:
  | tag | value |
  | Artist | =IAM |
- | auto: | - |
+ | auto | - |
  | and | - |
  | artist | blah |
  The python code is artist == v0  and u'blah' in artist.lower()
@@ -48,4 +48,34 @@ Scenario: basic usage in the middle + implicit op (Unsupported)
  | name | val |
  | v0   | IAM |
 # Note the additional space indicating a special keyword was used (bug?)
+
+
+Scenario: more realistic example
+ Parse Artist: =IAM or artist: blah auto:
+ The tokens are:
+ | tag | value |
+ | Artist | =IAM | 
+ | or | - |
+ | artist | blah |
+ | auto | - |
+ 
+ The python code is artist == v0 or u'blah' in artist.lower()
+ The variables are:
+ | name | val |
+ | v0   | IAM |
+
+
+Scenario: more realistic example with value passing
+ Parse Artist: =IAM or artist: blah auto: 15
+ The tokens are:
+ | tag | value |
+ | Artist | =IAM | 
+ | or | - |
+ | artist | blah |
+ | auto | 15 |
+ 
+ The python code is artist == v0 or u'blah' in artist.lower()
+ The variables are:
+ | name | val |
+ | v0   | IAM |
 
