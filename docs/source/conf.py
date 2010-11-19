@@ -17,12 +17,15 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append(os.path.abspath('.'))
-sys.path[0:0] = ( '../dev/zicbee/zicbee',
-        '../dev/zicbee-lib/',
-        '../dev/zicbee-vlc/',
-        '../dev/zicbee-mplayer/',
-        '../dev/zicbee-gst/')
+a = os.path.abspath
+sys.path[0:0] = (
+        a('../../dev/zicbee/'),
+        a('../../dev/zicbee-lib/'),
+        a('../../dev/zicbee-vlc/'),
+        a('../../dev/zicbee-mplayer/'),
+        a('../../dev/zicbee-gst/'))
 
+print sys.path
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
@@ -96,7 +99,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = 'default'
+html_theme = 'sphinxdoc'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
