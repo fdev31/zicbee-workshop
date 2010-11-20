@@ -16,12 +16,6 @@ See also :ref:`wasp`.
 
     This is the current version of :mod:`zicbee`
 
-.. automodule:: zicbee.ui
-   :members:
-
-.. automodule:: zicbee.core
-   :members:
-
 API
 ===
 .. toctree::

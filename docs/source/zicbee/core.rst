@@ -31,10 +31,10 @@ This class is available directly (without a prefix) on ``zicdb serve`` instances
    :undoc-members:
 
 Players (optional)
-==================
+++++++++++++++++++
 
 Player middleware
-+++++++++++++++++
+-----------------
 
 .. autoclass:: zicbee.core.player.PlayerCtl
    :members:

@@ -1,6 +1,5 @@
-
-ZicBee
-++++++
+User quickstart
++++++++++++++++
 
 To know more, visit `the website <http://zicbee.gnux.info/>`_.
 
