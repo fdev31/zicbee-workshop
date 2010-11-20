@@ -6,7 +6,16 @@
 Welcome to ZicBee's documentation!
 ==================================
 
-Contents:
+User documentation
+------------------
+
+  TODO: Write the doc
+
+.. todolist::
+
+
+Programming interface
+---------------------
 
 .. toctree::
    :maxdepth: 2

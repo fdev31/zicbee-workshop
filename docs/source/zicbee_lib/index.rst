@@ -23,4 +23,7 @@ Package containing a zicbee client library (see :mod:`zicbee_lib.commands`) and 
    formats
    resources
    commands
+   parser
+   remote_apis
+   wasp
 
