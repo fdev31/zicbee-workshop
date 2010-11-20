@@ -9,7 +9,10 @@ Welcome to ZicBee's documentation!
 User documentation
 ------------------
 
-  TODO: Write the doc
+.. toctree::
+    :maxdepth: 2
+
+    intro
 
 .. todolist::
 

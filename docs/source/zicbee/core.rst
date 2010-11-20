@@ -15,6 +15,7 @@ Database (access)
 This class is available via the http prefix **/db** on any ``zicdb serve`` instance.
 
 .. automodule:: zicbee.core.httpdb
+   :undoc-members:
    :members:
 
 See also :class:`Database`
@@ -24,12 +25,10 @@ Player
 
 This class is available directly (without a prefix) on ``zicdb serve`` instances supporting player functions.
 
-.. automodule:: zicbee.core.player
-   :members:
-
 
 .. automodule:: zicbee.core.httpplayer
    :members:
+   :undoc-members:
 
 Players (optional)
 ==================
