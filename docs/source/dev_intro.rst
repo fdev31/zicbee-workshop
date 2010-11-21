@@ -50,14 +50,12 @@ To get a simple but working example, take a look to zicbee-mplayer's `Player
 class`_.
 
 You should have something like that in your setup.py to declare an entry
-point:
+point::
 
-{{{#!python
-entry_points = """
-[zicbee.player]
-mplayer = zicbee_mplayer:Player
-"""
-}}}
+    entry_points = """
+    [zicbee.player]
+    mplayer = zicbee_mplayer:Player
+    """
 
 Replace "mplayer" with the name of your backend (gstreamer, xine, vlc,
 ffmpeg, avbin, etc...) , and eventually "Player" if your implementation class
@@ -83,8 +81,8 @@ You should point a class defining those methods:
 -   position *property* Returns the actual playback position (in seconds)
 
 
-"out of the box" feature list ===
-+++++++++++++++++++++++++++++++++
+"out of the box" feature list
++++++++++++++++++++++++++++++
 
 -   database indexing (easy and fast lookup or m3u generation)
 -   local and remote

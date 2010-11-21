@@ -9,11 +9,12 @@ User documentation
 
 For a shorter introduction, see :ref:`Quickstart` page.
 
+.. _install:
 
 Installation instructions
 =========================
 
-Preferably, download and unzip a `packaged release`_ or clone the workshop
+Preferably, download and unzip a `packaged release`_ or get the workshop
 repository if you plan to hack the code:
 
 ::
@@ -21,6 +22,8 @@ repository if you plan to hack the code:
     ~/programs/> hg clone http://zicbee.gnux.info/hg/zicbee-workshop/ bee
     ~/programs/> cd bee
 
+.. note::
+    If you don't have :ref:`mercurial` installed, you can `get the workshop ZIP archive here <http://zicbee.gnux.info/hg/zicbee-workshop/archive/default.zip>`_.
 
 Now you should be able to run **manage** program so every source will be
 retrieved and a compact distribution will be built.
@@ -53,6 +56,10 @@ Note that zicserve is just a convenient way to run "zicdb serve".
 Dependencies:
 -------------
 
+The software and all the dependencies are available in pure python without native code requirement,
+it should run on any OS.
+Wherever many packages answers that requirement, then speed and simplicity of use is evaluated.
+
 -   3.0 > Python >= 2.6
 -   or Python 2.5 with:
 
@@ -62,18 +69,29 @@ Dependencies:
 
 Knowledges about shell usage and readline is a good point.
 
--   any shell, preferably with readline enabled [ui_core]
--   webpy >= 0.3 [ui_www]
--   buzhug [database]optional dependencies:
--   mplayer (the open one, mostly known by free software users) [player]
--   vlc [player]
--   python-gst (gstreamer) [player]
+-   any shell, preferably with readline enabled
+-   webpy >= 0.3
+-   buzhug [database]
 
 For playback, according to the backend, you will need either:
 
 -   mplayer(.exe) in your PATH
 -   libvlc available on your system
 -   gstreamer + pygst bindings
+
+.. note::
+    playback support is not the only way to use zicbee to play your music.
+    Currently you can generate m3u output that will open in your favorite music player.
+
+Related projects
+----------------
+
+  * `zicbee <http://pypi.python.org/pypi/zicbee>`_ (server (zicserve) / admin utilities (zicdb) / lightweight client (wasp))
+  * `zicbee-lib <http://pypi.python.org/pypi/zicbee-lib>`_  (base library for zicbee)
+  * `zicbee-mplayer <http://pypi.python.org/pypi/zicbee-mplayer>`_ (mplayer bindings, allow zicbee to play music)
+  * `zicbee-vlc <http://pypi.python.org/pypi/zicbee-vlc>`_ (vlc bindings, allow zicbee to play music)
+  * `zicbee-gst <http://pypi.python.org/pypi/zicbee-gst>`_ (GStreamer bindings, allow zicbee to play music)
+  * `zicbee-quodlibet <http://pypi.python.org/pypi/zicbee-quodlibet>`_ (plugin that turns quodlibet into a zicbee client)
 
 First run
 =========
@@ -618,3 +636,4 @@ contact me directly fdev31 AT gmail DOT com or fill the `Bugtracker`_.
 .. _distribute: http://python-distribute.org/distribute_setup.py
 .. _http://localhost:9090/: http://localhost:9090/
 .. _Bugtracker: http://zicbee.gnux.info/bugtraq
+.. _Mercurial: http://www.selenic.com/mercurial/wiki/BinaryPackages

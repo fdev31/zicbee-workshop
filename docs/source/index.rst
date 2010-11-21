@@ -11,6 +11,7 @@ Welcome to ZicBee's documentation!
 
     intro
     user_manual
+    changelog
 
 .. todolist::
 

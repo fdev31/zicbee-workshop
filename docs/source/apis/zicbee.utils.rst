@@ -11,6 +11,7 @@ zicbee.utils
    
       notify
    
+   .. autofunction:: notify
    
 
    
