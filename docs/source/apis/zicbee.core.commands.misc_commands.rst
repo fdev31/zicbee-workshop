@@ -14,19 +14,8 @@ zicbee.core.commands.misc_commands
       do_debug
       do_hash
       do_reset
-   
-   
 
    
    
    .. rubric:: Classes
 
-   .. autosummary::
-   
-      Database
-   
-   
-
-   
-   
-   
