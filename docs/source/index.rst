@@ -12,9 +12,14 @@ Welcome to ZicBee's documentation!
     intro
     user_manual
     changelog
+    roadmap
 
 .. todolist::
 
+Reporting bugs
+--------------
+
+Use the `Bugtracker`_ as anonymous user or send me an email (fdev31 @ gmail dot com).
 
 Developers Guides
 -----------------
@@ -32,3 +37,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. _Bugtracker: http://zicbee.gnux.info/bugtraq
