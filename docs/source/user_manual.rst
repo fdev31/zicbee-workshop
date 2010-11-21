@@ -173,11 +173,11 @@ Help youself::
 
 .. _pattern:
 
-Pattern/match commands
-======================
+Pattern
+=======
 
 Pattern is everywhere, used in www interface, in many shell commands (search,
-play, etc...).
+play, etc...). You could replace pattern with query since it's most about it.
 
 Syntax summary::
 
@@ -354,8 +354,8 @@ scan [directory|archive]...
 Scan directories/archive for files and add them to the database
 
 
-search[::format] "match command"
-++++++++++++++++++++++++++++++++
+search[::format] "pattern"
+++++++++++++++++++++++++++
 
 Search for songs in DB using a :ref:`pattern`, display results (output on stdout).
 
@@ -428,8 +428,8 @@ wasp specific
 
 .. _get:
 
-get "match command"
-+++++++++++++++++++
+get
++++
 
 Downloads the previous :ref:`search` result in :ref:`download_dir <set>`
 
@@ -458,9 +458,11 @@ show [number of items|slice]
 Shows the playlist content
 
 show the 4 elements from the current one::
+
     wasp show 4
 
 show elements from 1 to 15::
+
     show 1:15 will 
 
 .. note::
@@ -482,12 +484,12 @@ Display the whole playlist (naïve version of :ref:`show`)
 
 .. _play:
 
-play "match command"
-++++++++++++++++++++
+play "pattern"
+++++++++++++++
 
-Set playlist to specified request and start playing if previously stopped
+Set playlist to specified request (according to the :ref:`pattern`) and start playing if previously stopped
 
-match command:
+:ref:`pattern`:
 same as :ref:`search` command with 2 more fields:
 
 pls
@@ -547,8 +549,8 @@ save the current playlist to playlist "sogood"::
 
 .. _search:
 
-search "match command"
-++++++++++++++++++++++
+search "pattern"
+++++++++++++++++
 
 Search for a :ref:`pattern`, display results
 Results are also stored for commands like :ref:`get`

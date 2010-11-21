@@ -29,6 +29,7 @@ Developers Guides
     dev_intro
     api_reference
 
+See also the `sources repository <http://zicbee.gnux.info/hg/>`_
 
 Indices and tables
 ==================
@@ -38,3 +39,4 @@ Indices and tables
 * :ref:`search`
 
 .. _Bugtracker: http://zicbee.gnux.info/bugtraq
+
