@@ -18,19 +18,23 @@ import sys, os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append(os.path.abspath('.'))
 a = os.path.abspath
-sys.path[0:0] = (
+l = [
         a('../../dev/zicbee/'),
         a('../../dev/zicbee-lib/'),
         a('../../dev/zicbee-vlc/'),
         a('../../dev/zicbee-mplayer/'),
-        a('../../dev/zicbee-gst/'))
+        a('../../dev/zicbee-gst/'),
+    ]
+l.extend(a(os.path.join('../../dist', e)) for e in os.listdir('../../dist') if e.endswith('.egg'))
 
-print sys.path
+sys.path[0:0] = l
+print "PYTHONPATH='%s'"%':'.join(l)
+
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.pngmath', 'sphinx.ext.ifconfig', 'sphinx.ext.graphviz']
+extensions = ['sphinx.ext.autosummary', 'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.pngmath', 'sphinx.ext.ifconfig', 'sphinx.ext.graphviz']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -200,3 +204,8 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_use_modindex = True
+
+autosummary_generate = True
+autoclass_content = "both"
+autodoc_member_order = "bysource"
+autodoc_default_flags = ('members', 'undoc-members', 'show-inheritance', 'inherited')

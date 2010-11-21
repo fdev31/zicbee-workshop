@@ -1,3 +1,5 @@
+.. _quickstart:
+
 User quickstart
 +++++++++++++++
 
@@ -53,8 +55,8 @@ Including projects
   * `zicbee-gst <http://pypi.python.org/pypi/zicbee-gst>`_ (GStreamer bindings, allow zicbee to play music)
   * `zicbee-quodlibet <http://pypi.python.org/pypi/zicbee-quodlibet>`_ (plugin that turns quodlibet into a zicbee client)
 
-Quickstart
-==========
+Getting started
+===============
 
 Start the server (you may want to do this uppon your session startup)::
 

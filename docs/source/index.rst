@@ -6,27 +6,22 @@
 Welcome to ZicBee's documentation!
 ==================================
 
-User documentation
-------------------
-
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
     intro
+    user_manual
 
 .. todolist::
 
 
-Programming interface
----------------------
-
+Developers Guides
+-----------------
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 1
 
-   zicbee_lib/index
-   zicbee/index
-
-.. todolist::
+    dev_intro
+    api_reference
 
 
 Indices and tables
