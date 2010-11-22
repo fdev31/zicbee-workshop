@@ -1,1 +1,10 @@
 dev/EGG-INFO
+dev/EGG-INFO/PKG-INFO
+dev/EGG-INFO/SOURCES.txt
+dev/EGG-INFO/dependency_links.txt
+dev/EGG-INFO/entry_points.txt
+dev/EGG-INFO/not-zip-safe
+dev/EGG-INFO/requires.txt
+dev/EGG-INFO/spec
+dev/EGG-INFO/spec/depend
+dev/EGG-INFO/top_level.txt
