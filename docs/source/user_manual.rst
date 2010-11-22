@@ -85,7 +85,7 @@ As easy as setuptools::
     ~% pip install -U zicbee
 
 
-.. info::
+.. note::
     "-U" means update in pip and easy_install.
 
 
