@@ -3,7 +3,7 @@ Roadmap
 =======
 
 **1.4** (diversity)
-==================
+===================
 
  - Write many player backends (ex: xine, vlc, gst, pyglet.avbin)
  - Introduce db backends (ex: buzhug, json, whoosh, sqlite)
