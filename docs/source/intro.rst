@@ -1,8 +1,8 @@
-.. _quickstart:
+.. _Quickstart:
 
-===============
-User quickstart
-===============
+==============
+Quick overview
+==============
 
 To know more, visit `the website <http://zicbee.gnux.info/>`_.
 
