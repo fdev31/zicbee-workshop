@@ -154,7 +154,7 @@ now the server is looping, you can access the music of this computer remotely
 
 If you installed zicbee-mplayer (or vlc or gst), then you can use this device
 to play music too. If you want to use your own player with zicbee, just
-:ref:`search` the database and request some playlist (m3u) output !
+:ref:`searchcmd` the database and request some playlist (m3u) output !
 
 Open your web browser, point `http://localhost:9090/` and you should see
 some graphics.
@@ -363,7 +363,7 @@ format
     specifies the output format (for now: m3u or null or default)
 
 .. warning::
-   Do not mangle with :ref:`search` command of the client, this one is called on :ref:`zicdb` and only works locally.
+   Do not mangle with :ref:`searchcmd` command of the client, this one is called on :ref:`zicdb` and only works locally.
    If you want m3u output using wasp, take a look at the :ref:`m3u` command.
 
 
@@ -431,7 +431,7 @@ wasp specific
 get
 +++
 
-Downloads the previous :ref:`search` result in :ref:`download_dir <set>`
+Downloads the previous :ref:`searchcmd` result in :ref:`download_dir <set>`
 
 .. warning:: this only works on the interactive shell (within "wasp")
     It won't work if called from the commandline
@@ -490,7 +490,7 @@ play "pattern"
 Set playlist to specified request (according to the :ref:`pattern`) and start playing if previously stopped
 
 :ref:`pattern`:
-same as :ref:`search` command with 2 more fields:
+same as :ref:`searchcmd` command with 2 more fields:
 
 pls
     output playlist name
@@ -547,7 +547,7 @@ save the current playlist to playlist "sogood"::
 
 
 
-.. _search:
+.. _searchcmd:
 
 search "pattern"
 ++++++++++++++++
