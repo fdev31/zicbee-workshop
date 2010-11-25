@@ -39,3 +39,13 @@ Feature: no keyword given
  | v1 | hello world |
  | v2 | hello world |
 
+ Scenario: check keywords in non keyword request
+ Parse wax tailor
+ The tokens are:
+ | tag | value |
+ | artist | wax tailor |
+ | or | - |
+ | album | wax tailor |
+ | or | - |
+ | title | wax tailor |
+
