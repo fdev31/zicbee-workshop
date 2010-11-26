@@ -2,13 +2,10 @@ zicbee_lib.formats
 ==================
 
 .. automodule:: zicbee_lib.formats
-
-   
    
    .. rubric:: Functions
 
    .. autosummary::
-      :toctree:
    
       abspath
       clean_path
