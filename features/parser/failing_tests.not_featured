@@ -1,0 +1,15 @@
+Feature: failing parsing
+
+    Scenario: tricky pattern4
+        Parse artist: (Bob marley and the wa or tricky)
+        The tokens are:
+            |   tag |   value   |
+            | (     | - |
+            |  artist |   bob marley and the wa  |
+            | or |   -  |
+            | artist |  tricky |
+        	| )		| 	|
+        The python code is u'bob marley and the wa' in artist.lower() or u'tricky' in artist.lower()
+        and the variables are:
+        | name | val |
+

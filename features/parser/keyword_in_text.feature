@@ -31,4 +31,3 @@ Feature: artists parsing
         The python code is u'bob marley and the wa' in artist.lower() or u'should i stay or should i go now' in title.lower()
         and the variables are:
         | name | val |
-
