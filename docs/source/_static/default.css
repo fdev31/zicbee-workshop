@@ -1,0 +1,11 @@
+div.sidebar {
+  width: 20em;
+  float: right;
+  font-size: .9em;
+  right: 10px;
+  bottom: 10px;
+  top: auto;
+  left: auto;
+  position: fixed;
+  display: block;
+}

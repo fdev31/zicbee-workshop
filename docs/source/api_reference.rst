@@ -1,9 +1,11 @@
 API Reference
 =============
+
+.. automodule::    zicbee
+
 .. autosummary::
     :toctree: apis
 
-    zicbee
     zicbee.core
     zicbee.core.commands
     zicbee.core.httpdb
@@ -15,7 +17,12 @@ API Reference
     zicbee.db.dbe
     zicbee.ui
     zicbee.utils
-    zicbee_lib
+
+.. automodule::    zicbee_lib
+
+.. autosummary::
+    :toctree: apis
+
     zicbee_lib.commands
     zicbee_lib.commands.command_get
     zicbee_lib.commands.command_misc
