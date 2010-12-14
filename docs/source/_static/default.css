@@ -9,3 +9,9 @@ div.sidebar {
   position: fixed;
   display: block;
 }
+
+div.documentwrapper {
+	margin-left: auto;
+	margin-right: auto;
+	width: 66%;
+}

@@ -3,8 +3,44 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to ZicBee's documentation!
-==================================
+
+=================
+Welcome to ZicBee
+=================
+
+.. image:: _static/button.png
+   :target: http://zicbee.gnux.info/files/zicbee-0.9-rc8.zip
+
+**0.9-RC8** is out, changelog from rc7:
+
+ * parser
+ * ``auto:`` keyword
+ * .zip install & setuptools check
+
+
+
+What is it ?
+************
+
+Zicbee is an alternative to mpd on steroids written in pure python.
+It's specially designed for people with huge playlists collection needing a fast lookup over the whole database.
+By design, it will never interrupt the current song, you have to use "next" or "prev" to do that, or just wait the end :)
+
+.. image:: _static/design.png
+
+Each component of this graph except the dotted borders one can be on a separate computer.
+The optional player feature is linked to zicdb server (the sound will be produced by this one, unless you are using m3u format or quodlibet plugin).
+
+The whole pack containing every player backend, the server and the shell plus all the dependencies, is *less than 600k* !
+Just unpack the zip file and execute the project, no install needed.
+
+Contact
+*******
+
+gIf you want to contribute or need help, write a gentle mail at fdev31 <AT> gmail <DOT> com
+
+Documentation
+*************
 
 .. toctree::
     :maxdepth: 1
@@ -14,29 +50,35 @@ Welcome to ZicBee's documentation!
     changelog
     roadmap
 
+
+Indices and tables
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
 .. todolist::
 
-Reporting bugs
---------------
+Bug reporting
+*************
 
 Use the `Bugtracker`_ as anonymous user or send me an email (fdev31 @ gmail dot com).
 
 Developers Guides
------------------
+*****************
 .. toctree::
     :maxdepth: 1
 
     dev_intro
     api_reference
 
-See also the `sources repository <http://zicbee.gnux.info/hg/>`_
+Browsing sources
+****************
 
-Indices and tables
-==================
+See the `sources repository <http://zicbee.gnux.info/hg/>`_
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
 
 .. _Bugtracker: http://zicbee.gnux.info/bugtraq
 
