@@ -40,12 +40,13 @@ Contact
 Email
 -----
 
-If you want to contribute or need help, write a gentle mail at fdev31 <AT> gmail <DOT> com
+Use my email for bugreport, urgent requests, support, or anything.
+My contact is fdev31 <AT> gmail <DOT> com.
 
 Bug reporting
 -------------
 
-Use the `Bugtracker`_ as anonymous user or send me an email (fdev31 @ gmail dot com).
+Use the `Bugtracker`_ , don't try to create an account, just report it anonymously.
 
 
 Documentation
