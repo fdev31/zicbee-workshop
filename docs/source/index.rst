@@ -1,8 +1,3 @@
-.. ZicBee documentation master file, created by
-   sphinx-quickstart on Sun Dec 13 18:59:23 2009.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 
 =================
 Welcome to ZicBee
@@ -40,7 +35,7 @@ Contact
 Email
 -----
 
-Use my email for bugreport, urgent requests, support, or anything.
+Use my email for bug-reporting, urgent requests, support, or anything.
 My contact is fdev31 <AT> gmail <DOT> com.
 
 Bug reporting
@@ -61,8 +56,10 @@ Documentation
     roadmap
 
 
-.. todolist::
+Getting sources
+***************
 
+See the `sources repository browser <sources>`_ . The applied license is the "New BSD License".
 
 Developers Corner
 *****************
@@ -76,12 +73,8 @@ Developers Corner
 * :ref:`modindex`
 * :ref:`search`
 
-Browsing sources
-****************
-
-See the `sources repository <http://zicbee.gnux.info/hg/>`_
-
-
+.. todolist::
 
 .. _Bugtracker: http://zicbee.gnux.info/bugtraq
+.. _sources: http://zicbee.gnux.info/hg/
 
