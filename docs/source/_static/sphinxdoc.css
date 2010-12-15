@@ -26,8 +26,13 @@ body {
     padding: 0;
     border: 1px solid #aaa;
 
-    margin: 0px 80px 0px 80px;
-    min-width: 740px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1024px;
+}
+
+section img {
+	text-align: center;
 }
 
 div.document {
@@ -154,19 +159,27 @@ div.body a {
 h1 {
     margin: 0;
     padding: 0.7em 0 0.3em 0;
-    font-size: 1.5em;
-    color: #11557C;
+    font-size: 2em;
+    color: #ffd;
+    text-shadow: 1px 1px 5px #555;
+
 }
 
 h2 {
     margin: 1.3em 0 0.2em 0;
-    font-size: 1.35em;
+    font-size: 1.5em;
     padding: 0;
+    text-shadow: 0.3ex 0.3ex 2px #dcc;
 }
 
 h3 {
     margin: 1em 0 -0.3em 0;
     font-size: 1.2em;
+    //color: #777;
+}
+
+h4 {
+	color: #779;
 }
 
 div.body h1 a, div.body h2 a, div.body h3 a, div.body h4 a, div.body h5 a, div.body h6 a {
@@ -338,10 +351,10 @@ div.viewcode-block:target {
     border-bottom: 1px solid #ac9;
 }
 
-
-
+/*
 div.documentwrapper {
 	margin-left: auto;
 	margin-right: auto;
 	width: 66%;
 }
+*/

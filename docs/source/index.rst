@@ -11,11 +11,11 @@ Welcome to ZicBee
 .. image:: _static/button.png
    :target: http://zicbee.gnux.info/files/zicbee-0.9-rc8.zip
 
-**0.9-RC8** is out, changelog from rc7:
+**0.9-RC8** is out, changelog from *rc7*:
 
- * parser
- * ``auto:`` keyword
- * .zip install & setuptools check
+* Some fixes on pattern parser
+* Re-add ``auto:`` keyword
+* Fix install from zip and setuptools compatibility
 
 
 
@@ -31,13 +31,22 @@ By design, it will never interrupt the current song, you have to use "next" or "
 Each component of this graph except the dotted borders one can be on a separate computer.
 The optional player feature is linked to zicdb server (the sound will be produced by this one, unless you are using m3u format or quodlibet plugin).
 
-The whole pack containing every player backend, the server and the shell plus all the dependencies, is *less than 600k* !
+The whole pack containing every player backend, the server and the shell plus all the dependencies, is **less than 600k** !
 Just unpack the zip file and execute the project, no install needed.
 
 Contact
 *******
 
-gIf you want to contribute or need help, write a gentle mail at fdev31 <AT> gmail <DOT> com
+Email
+-----
+
+If you want to contribute or need help, write a gentle mail at fdev31 <AT> gmail <DOT> com
+
+Bug reporting
+-------------
+
+Use the `Bugtracker`_ as anonymous user or send me an email (fdev31 @ gmail dot com).
+
 
 Documentation
 *************
@@ -51,27 +60,20 @@ Documentation
     roadmap
 
 
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 .. todolist::
 
-Bug reporting
-*************
 
-Use the `Bugtracker`_ as anonymous user or send me an email (fdev31 @ gmail dot com).
-
-Developers Guides
+Developers Corner
 *****************
 .. toctree::
     :maxdepth: 1
 
     dev_intro
     api_reference
+
+* :ref:`API Index <genindex>`
+* :ref:`modindex`
+* :ref:`search`
 
 Browsing sources
 ****************
