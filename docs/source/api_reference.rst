@@ -24,8 +24,6 @@ API Reference
     :toctree: apis
 
     zicbee_lib.commands
-    zicbee_lib.commands.command_get
-    zicbee_lib.commands.command_misc
     zicbee_lib.config
     zicbee_lib.core
     zicbee_lib.debug
