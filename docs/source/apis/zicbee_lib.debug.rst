@@ -3,24 +3,23 @@ zicbee_lib.debug
 
 .. automodule:: zicbee_lib.debug
 
-   
-   
+
+
    .. rubric:: Functions
 
    .. autosummary::
-   
+
       DEBUG
-      getLogger
       nop
+      log
       set_trace
       traced
-   
-   
 
-   
-   
-   
 
-   
-   
-   
+
+
+
+
+
+
+
