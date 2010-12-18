@@ -3,56 +3,36 @@ zicbee_lib.commands
 
 .. automodule:: zicbee_lib.commands
 
-   
-   
-   .. rubric:: Functions
+   .. autofunction:: cd_command
+   .. autofunction:: complete_cd
+   .. autofunction:: execute
+   .. autofunction:: forget_results
+   .. autofunction:: ls_command
+   .. autofunction:: pwd_command
+   .. autofunction:: remember_ls_results
+   .. autofunction:: unroll
+   .. autofunction:: write_lines
 
-   .. autosummary::
-   
-      apply_grep_pattern
-      cd_command
-      complete_alias
-      complete_cd
-      complete_set
-      execute
-      forget_results
-      get_last_search
-      hook_next
-      hook_prev
-      inject_playlist
-      iter_webget
-      ls_command
-      modify_delete
-      modify_move
-      modify_show
-      pwd_command
-      quote
-      random_command
-      remember_ls_results
-      set_alias
-      set_grep_pattern
-      set_shortcut
-      set_variables
-      show_random_result
-      tidy_show
-      unroll
-      write_lines
-   
-   
 
-   
-   
-   .. rubric:: Classes
+.. automodule:: zicbee_lib.commands.command_misc
 
-   .. autosummary::
-   
-      GeneratorType
-      chain
-      izip_longest
-      partial
-   
-   
+   .. autofunction:: apply_grep_pattern
+   .. autofunction:: complete_alias
+   .. autofunction:: complete_set
+   .. autofunction:: hook_next
+   .. autofunction:: hook_prev
+   .. autofunction:: inject_playlist
+   .. autofunction:: modify_move
+   .. autofunction:: modify_show
+   .. autofunction:: set_alias
+   .. autofunction:: set_grep_pattern
+   .. autofunction:: set_shortcut
+   .. autofunction:: set_variables
+   .. autofunction:: tidy_show
 
-   
-   
-   
+
+.. automodule:: zicbee_lib.commands.command_get
+
+   .. autofunction:: get_last_search
+
+
