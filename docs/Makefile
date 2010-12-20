@@ -30,6 +30,8 @@ help:
 clean:
 	-rm -rf build/*
 
+sync:
+	rsync -ravpD build/html/ box.gnux.info:zicweb/
 cover:
 	$(SPHINXBUILD) -b coverage $(ALLSPHINXOPTS) build/html
 	@echo

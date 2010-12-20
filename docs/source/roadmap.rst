@@ -32,9 +32,8 @@ Roadmap
  - playcount
  - lastplayed (date)
  - like/dislike counter "ala facebook"
- - automatic localhost substitution
 
----- 
+----
 
 Random ideas
 ============

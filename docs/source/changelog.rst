@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.9
-...
+0.9 "Long way home"
+...................
 
+ - automatic ``localhost`` substitution in URLs (can be customised too)
  - shiny new client (wasp), comes with many new features (grep, append, inject, get...)
     - **grep** can be used as parameter for ``move`` and ``delete`` commands. (use after using grep command)
     - ``move`` and ``delete`` also support slices passing (ex.: ``move 1:3``, ``delete 2:10``)
@@ -25,8 +26,8 @@ Changelog
  - minimal www interface (for low power machines, don't expect too much)
     - use /basic on any server with a player, it's quite rought now
  - Integrate automatic playlists with ``auto`` special tag
-    - minimalistic last.fm support (no account needed, only works with "artist" keyword)
-    - modulable tolerence giving a digit (ex: ``auto: 15``)
+    - minimalist last.fm support (no account needed, only works with "artist" keyword)
+    - modulable tolerance giving a digit (ex: ``auto: 15``)
     - "``artist: wax tailor or artist: birdy nam nam auto:``" automatically generates a playlist of similar artists (no value=10)
  - Split project for clarity
  - stored playlists (including position)
@@ -41,8 +42,8 @@ Changelog
  - Tons of bugfixes! (among others, the parser is rewritten, with minor syntax changes)
  - known bugs: volume command is not very functional yet
 
-0.8
-...
+0.8 "Road to usability"
+.......................
 
  - add support for FLAC
  - interactive shell support with completion and history
@@ -53,8 +54,8 @@ Changelog
     - see "use" command for usage
  - complete admin commands (see "set" command)
 
-0.7
-...
+0.7 "First shot"
+................
 
  - add play, pause, next, prev, list
  - add cleaner configuration:: more unified (prepare themes handling)

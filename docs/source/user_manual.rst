@@ -206,6 +206,10 @@ Possible fields:
 Commented Examples
 ------------------
 
+.. note::
+
+   here all examples are prefixed with ``wasp`` but that's just a sample usage,
+   the pattern can be entered in the interactive shell, in the web interface, etc...
 
 
 find songs from "shakira" and of more than 3 min::
@@ -463,7 +467,7 @@ show the 4 elements from the current one::
 
 show elements from 1 to 15::
 
-    show 1:15 will 
+    show 1:15 will
 
 .. note::
     show :10

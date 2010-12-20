@@ -9,6 +9,6 @@ zicbee.core.httpdb
       Search form requiring:
 
       :arg id: song id, if the **pattern** is not specified
-      :arg pattern: search pattern, if **id** is unspecified
+      :arg pattern: search :ref:`pattern`, if **id** is unspecified
       :arg fmt: output, see :data:`available_formats`
 
