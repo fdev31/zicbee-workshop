@@ -59,7 +59,7 @@ Documentation
 Getting sources
 ***************
 
-See the `sources repository browser <sources>`_ . The applied license is the "New BSD License".
+See the `sources browser`_ . The applied license is the "New BSD License".
 
 Developers Corner
 *****************
@@ -76,5 +76,5 @@ Developers Corner
 .. todolist::
 
 .. _Bugtracker: http://zicbee.gnux.info/bugtraq
-.. _sources: http://zicbee.gnux.info/hg/
+.. _Sources browser: http://zicbee.gnux.info/hg/
 
