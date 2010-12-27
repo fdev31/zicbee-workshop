@@ -109,8 +109,8 @@ class Cloner(object):
 
     def _failsafe_get(self, name):
         uri = "%s/%s/archive/%s.zip"%(self.HOST, name, self.BRANCH)
-        zipname = "%s.zip"%name
-        site = urllib.urlretrieve(uri, zipname)
+        zipname = "%s.zip"%name if os.path.exists("%s.zip") else "%s-%s.zip"%(name, self.BRANCH)
+        urllib.urlretrieve(uri, zipname)
         zp = Zipper(zipname)
         zp.extract(load=True)
         dirname = zp[0][0].split( '/', 1)[0]
@@ -130,7 +130,10 @@ class Cloner(object):
                         shutil.copyfile( src, dst )
             shutil.rmtree(dirname)
         else:
-            shutil.rmtree(name)
+            try:
+                shutil.rmtree(name)
+            except OSError:
+                pass
             os.rename( dirname, name)
 
     def __init__(self):
