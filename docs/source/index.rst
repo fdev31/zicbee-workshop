@@ -60,6 +60,7 @@ Getting sources
 ***************
 
 See the `sources browser`_ . The applied license is the "New BSD License".
+
 Before building latest sources, check the `test report`_ out !
 
 Developers Corner
