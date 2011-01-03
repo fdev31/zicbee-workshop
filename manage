@@ -317,7 +317,6 @@ packages = [
         for soft in self.softs:
             print "[%s]"%soft.upper()
             dispatch(list(args)+['-R', os.path.join(DEV_DIR, soft)])
-        print "diff"
 
     def _gen_package(self, *args, **kw):
         """ Will generate %s """%hivename
