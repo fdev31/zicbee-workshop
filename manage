@@ -312,6 +312,12 @@ packages = [
 
             file(os.path.join(DEV_DIR, 'EGG-INFO', prop), 'w').write(content)
 
+    def hg(self, *args):
+        from mercurial.dispatch import dispatch
+        for soft in self.softs:
+            print "[%s]"%soft.upper()
+            dispatch(list(args)+['-R', os.path.join(DEV_DIR, soft)])
+        print "diff"
 
     def _gen_package(self, *args, **kw):
         """ Will generate %s """%hivename
@@ -459,6 +465,7 @@ mkbin   : Recreates the executable
 cleanup : Removes those .pyc & .pyo files from projects
 branch  : Sets the release mode (use branch.dev to switch to beta test mode ...)
           WARN: changes will be saved into executable
+hg      : Executes some hg command on all dev repositories, try "hg.diff"
 install : Easy_install develop zicbee related projects
 
 Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0], ', '.join(default_cmds), hivename, hivename)
@@ -466,6 +473,7 @@ Submit bugs with http://code.google.com/p/zicdb/issues/entry :)"""%(sys.argv[0],
     cmd_handlers = {
             'gen': inst_tool.std_gen,
             'fgen': inst_tool.force_gen,
+            'hg': inst_tool.hg,
             'mkbin': inst_tool.mkbin,
             'branch': change_branch,
             'help': print_help
