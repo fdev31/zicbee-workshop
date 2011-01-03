@@ -65,3 +65,12 @@ Feature: artists parsing
         and the variables are:
         | name | val |
 
+   Scenario: not keyword 
+        Parse artist: death in and not album: contino
+        The tokens are:
+            | tag   | value |
+            | artist | death in |
+            | and | - |
+            | not | - |
+            | album | contino |
+    
