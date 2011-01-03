@@ -66,11 +66,14 @@ Feature: artists parsing
         | name | val |
 
    Scenario: not keyword 
-        Parse artist: death in and not album: contino
+        Parse artist: death in and ! album: contino
         The tokens are:
             | tag   | value |
             | artist | death in |
             | and | - |
-            | not | - |
+            | ! | - |
             | album | contino |
+        The python code is u'death in' in artist.lower() and not u'contino' in album.lower()
+        and the variables are:
+        | name | val |
     
