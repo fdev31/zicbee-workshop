@@ -4,14 +4,13 @@ Welcome to ZicBee
 =================
 
 .. image:: _static/button.png
-   :target: http://zicbee.gnux.info/files/zicbee-0.9-rc8.zip
+   :target: http://zicbee.gnux.info/files/zicbee-0.9-rc9.zip
 
-**0.9-RC8** is out, changelog from *rc7*:
+**0.9-RC9** is out, changelog from *rc8*:
 
-* Some fixes on pattern parser
-* Re-add ``auto:`` keyword
-* Fix install from zip and setuptools compatibility
-
+* fixed many small bugs
+* better/cleaner doc & website
+* add support for automatic "local host" name discovery
 
 
 What is it ?
