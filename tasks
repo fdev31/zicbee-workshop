@@ -1,1 +1,6 @@
+Impossible to edit meta-informations of a song: I must use exfalso to edit my song tags while I would like to find a tool to do  that in zicbee... | id:0c6d6f0595f8da7efe33fd726bb47872ffe451f1
+If you change a tag, I would like it to be saved into the file | id:1681af3583db35055d72464f41fecafe0a2ce29f
 Win32 setup issues: pkg_resources,readline (Note: by default, python directory is not added to the path. You can get pyhton installation path from HKLM\SOFTWARE\Python\PythonCore\InstallPath) | id:1bdd267bd0fc73e320adc13c49121815ea0171e1
+can't filter search result by extensions (mp3/flac/ogg/...) | id:29e2e441e86f878dca931bb2287759b3e1167c8f
+The playlist is missing at first when starting from a blank playlist, even after entering a new request in player.  If we reload the page it looks OK (javascript script restarted). | id:5568df4258a28b10eb788cda7034c914db175b81
+An adaptation of http://incise.org/mpris-remote.html should be quite easy to  do... | id:a939363be9b84942c104286f2ca67d100fda84ea
