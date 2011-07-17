@@ -1,0 +1,1 @@
+Win32 setup issues: pkg_resources,readline (Note: by default, python directory is not added to the path. You can get pyhton installation path from HKLM\SOFTWARE\Python\PythonCore\InstallPath) | id:1bdd267bd0fc73e320adc13c49121815ea0171e1
