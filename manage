@@ -18,6 +18,7 @@ try:
 except OSError:
     pass
 try:
+    shutil.rmtree(os.path.join('dist', 'dev'))
     os.unlink(os.path.join('dist', 'dev'))
 except OSError:
     pass
