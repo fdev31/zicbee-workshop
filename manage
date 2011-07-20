@@ -18,11 +18,13 @@ try:
 except OSError:
     pass
 try:
-    shutil.rmtree(os.path.join('dist', 'dev'))
-    os.unlink(os.path.join('dist', 'dev'))
+    os.mkdir(os.path.join('dist', 'dev', 'EGG-INFO'))
 except OSError:
     pass
-os.symlink(os.path.join('..', 'dev'), os.path.join('dist', 'dev'))
+try:
+    os.symlink(os.path.join('..', 'dev'), os.path.join('dist', 'dev'))
+except OSError:
+    pass
 
 try:
     import _genexecutables
@@ -311,7 +313,8 @@ packages = [
             else:
                 content = data
 
-            file(os.path.join(DEV_DIR, 'EGG-INFO', prop), 'w').write(content)
+            if os.path.sep not in prop:
+                file(os.path.join(DEV_DIR, 'EGG-INFO', prop), 'w').write(content)
 
     def hg(self, *args):
         from mercurial.dispatch import dispatch
