@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 __all__ = ['gen', 'executables']
 import os
+import sys
 
-script_base = """#!/usr/bin/env python
+script_base = """#!/usr/bin/env python%(pyver)s
 import os
 import sys
 DB_DIR = os.path.expanduser(os.getenv('ZICDB_PATH') or '~/.zicdb')
@@ -33,10 +34,12 @@ def _try_chmod(n, m):
         pass
 
 def gen():
+    pyver = '.'.join(str(x) for x in sys.version_info[:2])
     for name, mod, starter in executables:
         _try_chmod(name, 0755)
         file(name, 'w').write(script_base%{
             'mod':mod,
+            'pyver': pyver,
             'exe':starter,
             })
         _try_chmod(name, 0755)
