@@ -12,6 +12,8 @@ from functools import partial
 
 first_run = not os.path.exists('bee.egg')
 
+PY_VER='.'.join(str(x) for x in sys.version_info[:2])
+
 # Ensure correct dist folder
 try:
     os.mkdir('dist')
@@ -86,7 +88,7 @@ class Cloner(object):
     If mercurial is installed, it will use it, if not, just get the latest version zipfile and unpack
     """
 
-    HOST = "http://zicbee.gnux.info/hg"
+    HOST = "http://zicbee.gnux.info:5000"
     BRANCH = "default" # change to "default" to get the stable version or tip to get latest
 
     def _hg_get(self, name):
@@ -235,7 +237,7 @@ build = 1
 arch = None
 platform = 'linux2'
 osdist = None
-python = '2.5'
+python = '%s'
 packages = [
   'buzhug 1.8',
   'mutagen 1.20',
@@ -245,7 +247,7 @@ packages = [
   'zicbee-vlc 0.9',
   'zicbee-gst 0.6',
 ]
-            """,
+            """%PY_VER,
           }
         def safe_readlines(path, mode='r'):
             try:
@@ -341,14 +343,14 @@ packages = [
                 if (forced and (not args or pkg.rsplit(os.sep, 1)[-1] in args)) or not os.path.exists(egg):
                     if not os.path.isfile(egg):
                         if not os.path.isdir(fullpath):
-                            os.system("easy_install -U -e %s -b '%s' '%s'"%(self.packages_extras.get(pkg, ''), DIST_DIR, pkg))
+                            os.system("easy_install-%s -U -e %s -b '%s' '%s'"%(PY_VER, self.packages_extras.get(pkg, ''), DIST_DIR, pkg))
                         for e in os.listdir(fullpath):
                             if e.endswith('.egg'):
                                 rm(j(fullpath, DIST_DIR, e))
                     with Workdir(fullpath):
                         rm(j(fullpath, 'build'))
                         rm(j(fullpath, DIST_DIR))
-                        os.system('''python -c "import setuptools; execfile('setup.py')" bdist_egg''')
+                        os.system('''python%s -c "import setuptools; execfile('setup.py')" bdist_egg'''%PY_VER)
                         egg_file = [j(fullpath, DIST_DIR, e) for e in os.listdir(DIST_DIR) if e.endswith('.egg')][0]
                     shutil.move(egg_file, egg)
                 print "extracting %s..."%egg
