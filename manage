@@ -4,11 +4,15 @@ __all__ = ['Cloner', 'Workdir', 'Installer']
 
 import os
 import sys
+import re
 import urllib
 import shutil
 import tempfile
 import zipfile
 from functools import partial
+import easy_install
+
+EZ_INSTALL = 'easy_install-' + re.compile('python(\d+\.\d+)').search(easy_install.__file__).groups()[0]
 
 first_run = not os.path.exists('bee.egg')
 
@@ -319,10 +323,28 @@ packages = [
                 file(os.path.join(DEV_DIR, 'EGG-INFO', prop), 'w').write(content)
 
     def hg(self, *args):
-        from mercurial.dispatch import dispatch
+        from mercurial.dispatch import dispatch as hg_dispatch
+        dispatch = getattr(self, '_hg_dispatch', None)
+        if not dispatch:
+            from mercurial.__version__ import version as hg_version
+            if hg_version.startswith('2.'):
+                class _Mock(object):
+                    def __init__(self, args):
+                        self.args = args
+                        self.ui = None
+                        self.repo = None
+                        self.fin = sys.stdin
+                        self.fout = sys.stdout
+                        self.ferr = sys.stderr
+                def dispatch(args):
+                    return hg_dispatch(_Mock(args))
+                self._hg_dispatch = dispatch
+            else:
+                self._hg_dispatch = hg_dispatch
+
         for soft in self.softs:
             print "[%s]"%soft.upper()
-            dispatch(list(args)+['-R', os.path.join(DEV_DIR, soft)])
+            self._hg_dispatch(list(args)+['-R', os.path.join(DEV_DIR, soft)])
 
     def _gen_package(self, *args, **kw):
         """ Will generate %s """%hivename
@@ -343,14 +365,14 @@ packages = [
                 if (forced and (not args or pkg.rsplit(os.sep, 1)[-1] in args)) or not os.path.exists(egg):
                     if not os.path.isfile(egg):
                         if not os.path.isdir(fullpath):
-                            os.system("easy_install-%s -U -e %s -b '%s' '%s'"%(PY_VER, self.packages_extras.get(pkg, ''), DIST_DIR, pkg))
+                            os.system("%s -U -e %s -b '%s' '%s'"%(EZ_INSTALL, self.packages_extras.get(pkg, ''), DIST_DIR, pkg))
                         for e in os.listdir(fullpath):
                             if e.endswith('.egg'):
                                 rm(j(fullpath, DIST_DIR, e))
                     with Workdir(fullpath):
                         rm(j(fullpath, 'build'))
                         rm(j(fullpath, DIST_DIR))
-                        os.system('''python%s -c "import setuptools; execfile('setup.py')" bdist_egg'''%PY_VER)
+                        os.system('''%s -c "import setuptools; execfile('setup.py')" bdist_egg'''%sys.executable)
                         egg_file = [j(fullpath, DIST_DIR, e) for e in os.listdir(DIST_DIR) if e.endswith('.egg')][0]
                     shutil.move(egg_file, egg)
                 print "extracting %s..."%egg
