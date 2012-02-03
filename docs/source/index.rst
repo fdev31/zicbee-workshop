@@ -76,7 +76,7 @@ Developers Corner
 
 .. todolist::
 
-.. _Bugtracker: http://zicbee.gnux.info/bugtraq
-.. _Sources browser: http://zicbee.gnux.info/hg/
+.. _Bugtracker: http://github.com/fdev31/zicbee/issues
+.. _Sources browser: http://github.com/fdev31/
 .. _test report: tests.html
 
