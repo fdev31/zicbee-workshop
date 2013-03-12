@@ -1,3 +1,7 @@
 fix the bug about http playlist | id:01402b42fe09d3054c2b9349838eb8f3929cee41
 Finish the documentation (at least APIS) | id:2c9e30163a8bb6287ef4a34f2b1203968c63667c
 use a static website/pelican or markdoc/ | id:a04c7ac60345de2e730cb55a50ea3ac866942874
+
+TODO:
+- write a sqlite3 backend (faster) & use buzhug as fallback
+- re-write web part ? (cleaner routes... doc ?)
