@@ -92,8 +92,8 @@ class Cloner(object):
     If mercurial is installed, it will use it, if not, just get the latest version zipfile and unpack
     """
 
-    HOST = "http://zicbee.gnux.info:5000"
-    BRANCH = "default" # change to "default" to get the stable version or tip to get latest
+    HOST = "https://github.com/fdev31"
+    BRANCH = "master" # change to "default" to get the stable version or tip to get latest
 
     def _hg_get(self, name):
         uri = "%s/%s"%(self.HOST, name)
@@ -147,6 +147,7 @@ class Cloner(object):
 
     def __init__(self):
         try:
+            raise ImportError()
             import mercurial.ui
             import mercurial.commands
             import mercurial.localrepo
